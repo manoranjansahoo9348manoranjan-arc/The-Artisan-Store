@@ -101,7 +101,52 @@
 
       section.container-card{padding:30px;background:var(--card-bg);margin:30px auto;border-radius:var(--card-radius);box-shadow:var(--shadow-premium);max-width:1400px; /* Increased from 1200px */ border: 1px solid #e0e0e0; transition: transform 0.4s ease-out;}
       section.container-card:hover{transform: translateY(-3px); box-shadow: 0 10px 35px rgba(0,0,0,.25);}
-      .items-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;}
+     .items-grid {
+    display: grid;
+    /* This ensures cards fill the space and remove the 'black space' on the right */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 25px;
+}
+
+/* Specific adjustment for smaller mobile screens */
+@media (max-width: 768px) {
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+}
+/* Responsive Card Images */
+.card img {
+    width: 100%;
+    height: 140px; /* Shorter for mobile */
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .card img {
+        height: 180px;
+    }
+}
+/* Prevent content from being hidden behind the bottom nav on mobile */
+@media (max-width: 767px) {
+    body {
+        padding-bottom: 70px;
+    }
+    .whatsapp-btn-fixed {
+        bottom: 80px; /* Move WhatsApp button up so it doesn't block the nav */
+    }
+}
+
+/* Make headers look good on all screens */
+.brand-logo-text {
+    font-size: clamp(18px, 4vw, 30px);
+}
+
+.slider-caption {
+    font-size: clamp(1.2rem, 5vw, 3rem);
+    padding: 20px;
+    text-align: center;
+}
       
       /* New Card Styling for more content */
       .card{background:var(--card-bg);border-radius:var(--card-radius);padding:10px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:transform .2s,box-shadow .2s,background-color .3s; border: 1px solid #f0f0f0; position: relative;}
@@ -209,10 +254,10 @@
             </div>
             
             <div class="header-controls-right">
-              <div class="custom-translate-container" style="color: black !important;"> 
-                    <i class="bi bi-translate" style="font-size: 18px"></i>
-                    <div id="google_translate_element_custom"></div>
-                </div>
+                <a href="#orders" class="btn btn-outline-secondary p-2 wishlist-header-btn" style="border: 1px solid #ccc;">
+        <i class="bi bi-bag-check"></i><span class="ms-1 d-none d-lg-inline">Orders</span>
+    </a>
+              
               
                 <a href="#wishlist" class="btn btn-outline-secondary p-2 wishlist-header-btn" style="border: 1px solid #ccc;">
                     <i class="bi bi-heart-fill"></i><span class="ms-1 d-none d-lg-inline">Wishlist </span>
@@ -679,12 +724,20 @@ function getRatingStars(rating) {
 
 function updateCartCount() {
     const cart = loadCart();
-    document.getElementById('cartCount').innerText = cart.length;
+    // Use querySelectorAll to find BOTH desktop and mobile badges
+    const badges = document.querySelectorAll('.cart-count-badge');
+    badges.forEach(badge => {
+        badge.innerText = cart.length;
+    });
 }
 
 function updateWishlistCount() {
     const wishlist = loadWishlist();
-    document.getElementById('wishlistCount').innerText = wishlist.length;
+    // Use querySelectorAll to find BOTH desktop and mobile badges
+    const badges = document.querySelectorAll('.wishlist-count-badge');
+    badges.forEach(badge => {
+        badge.innerText = wishlist.length;
+    });
 }
 
 
@@ -1013,8 +1066,14 @@ function renderCatalog() {
  */
 function filterProducts() {
     const hash = window.location.hash;
+    const searchTerm = document.getElementById("desktopSearchInput").value;
+
     if (hash === '#home' || hash === '' || hash === '#main-catalog-view') {
         renderCatalog(); 
+    } else if (hash === '#all-decor') {
+        renderAllDecorPage(searchTerm); // Pass search to Decor page
+    } else if (hash === '#all-idols') {
+        renderAllIdolsPage(searchTerm); // Pass search to Idols page
     }
 }
 
@@ -1035,32 +1094,57 @@ function clearFilters() {
 
 /* --- FULL PAGE RENDERERS (Kept for navigation) --- */
 
-function renderAllDecorPage() {
+function renderAllDecorPage(searchTerm = "") {
     const products = loadProducts();
     const decorCategories = ["Marriage", "Birthday", "Corporate", "Baby Shower", "Cultural", "Festival", "Lighting & Furnishings", "Accessories"];
+    
+    // Combine default and extra products first
     let decorProducts = products.filter(p => decorCategories.includes(p.category));
-
     const needed = Math.max(0, 50 - decorProducts.length);
     if (needed > 0) {
         decorProducts = decorProducts.concat(generateExtraProducts("d_extra", needed, true));
     }
 
-    const grid = document.getElementById("allDecorGrid");
-    if (grid) grid.innerHTML = decorProducts.map(createProductCard).join('');
-}
+    // NEW: Filter by search term
+    if (searchTerm) {
+        decorProducts = decorProducts.filter(p => 
+            p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            p.category.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
 
-function renderAllIdolsPage() {
+    const grid = document.getElementById("allDecorGrid");
+    if (grid) {
+        grid.innerHTML = decorProducts.length > 0 ? 
+            decorProducts.map(createProductCard).join('') : 
+            `<p class="col-12 text-center py-5 text-muted">No matching decorations found.</p>`;
+    }
+}
+function renderAllIdolsPage(searchTerm = "") {
     const products = loadProducts();
     const idolCategories = ["Ganesh", "Saraswati", "Custom", "Durga", "Shiva", "Krishna", "Hanuman", "Lakshmi", "Buddhist", "Zodiac/Planets", "Religious Accessories", "Yantra", "Service"];
+    
+    // Combine default and extra products first
     let idolProducts = products.filter(p => idolCategories.includes(p.category));
-
     const needed = Math.max(0, 50 - idolProducts.length);
     if (needed > 0) {
         idolProducts = idolProducts.concat(generateExtraProducts("i_extra", needed, false));
     }
 
+    // NEW: Filter by search term
+    if (searchTerm) {
+        idolProducts = idolProducts.filter(p => 
+            p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            p.category.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+
     const grid = document.getElementById("allIdolsGrid");
-    if (grid) grid.innerHTML = idolProducts.map(createProductCard).join('');
+    if (grid) {
+        grid.innerHTML = idolProducts.length > 0 ? 
+            idolProducts.map(createProductCard).join('') : 
+            `<p class="col-12 text-center py-5 text-muted">No matching idols found.</p>`;
+    }
 }
 
 
@@ -1437,5 +1521,25 @@ function clearAllOrders() {
     }
 }
 </script>
+<div class="d-md-none fixed-bottom bg-white border-top d-flex justify-content-around align-items-center py-2 shadow-lg" style="z-index: 1050;">
+    <a href="#home" class="text-center text-decoration-none text-dark">
+        <i class="bi bi-house-door fs-4"></i>
+        <div style="font-size: 10px;">Home</div>
+    </a>
+    <a href="#wishlist" class="text-center text-decoration-none text-dark position-relative">
+        <i class="bi bi-heart fs-4"></i>
+        <span class="wishlist-count-badge" style="top: -2px; right: -8px;">0</span>
+        <div style="font-size: 10px;">Wishlist</div>
+    </a>
+    <a href="#cart" class="text-center text-decoration-none text-dark position-relative">
+        <i class="bi bi-cart3 fs-4"></i>
+        <span class="cart-count-badge" style="top: -2px; right: -8px;">0</span>
+        <div style="font-size: 10px;">Cart</div>
+    </a>
+    <a href="#orders" class="text-center text-decoration-none text-dark">
+        <i class="bi bi-bag-check fs-4"></i>
+        <div style="font-size: 10px;">Orders</div>
+    </a>
+</div>
 </body>
 </html>
