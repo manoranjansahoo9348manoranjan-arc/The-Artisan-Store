@@ -6,18 +6,44 @@
     <title>The Artisan Store — Full Catalog</title>
     <meta property="og:title" content="The Artisan Store" />
     <meta property="og:description" content="Handcrafted idols and luxury event decoration services." />
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <style>
-      :root{--brand-primary:#00b4d8;--brand-primary-dark:#0077b6;--brand-accent:#00ff7f;--brand-dark:#03045e;--brand-success:#00ff7f;--card-radius:12px;--shadow-premium:0 10px 30px rgba(0,0,0,.15);--bg-color:#f4f6f9;--text-color:#212529;--header-bg:white; --nav-bg:var(--brand-primary-dark);--card-bg:white;--glow-color:var(--brand-primary);}
-      body{font-family:Inter,Arial,sans-serif;margin:0;background:var(--bg-color);font-size:16px;color:var(--text-color);transition:background-color .3s,color .3s;}
+      :root {
+  --brand-gold: #b89c6d;
+  --brand-gold-dark: #8e6f3e;
+  --luxury-dark: #1a1a1a;
+  --parchment: #fdfbf8;
+  --text-main: #2c2c2c;
+  --card-shadow: 0 10px 40px rgba(0,0,0,0.04);
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--parchment);
+  color: var(--text-main);
+}
+
+h1, h2, h3, .brand-logo-text {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: -0.5px;
+}
       
       /* 1. LAYOUT OPTIMIZATION: Increased Max Width for better horizontal usage */
-      header{background:var(--header-bg);padding:15px 15px;color:var(--text-color);box-shadow:0 2px 4px rgba(0,0,0,.1); border-bottom: 1px solid #e0e0e0; }
+      header {
+  background: rgba(253, 251, 248, 0.8) !important; /* Semi-transparent Parchment */
+  backdrop-filter: blur(15px); /* Frosty glass effect */
+  -webkit-backdrop-filter: blur(15px);
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  border-bottom: 1px solid rgba(184, 156, 109, 0.2);
+  transition: all 0.3s ease;
+}
 
       .new-header-layout {
           display: grid;
@@ -34,12 +60,15 @@
           align-items: center;
           gap: 10px;
       }
+      .brand-logo-circle {
+  background: var(--brand-gold) !important;
+  box-shadow: 0 4px 15px rgba(184, 156, 109, 0.3);
+}
 
       .brand-logo-text {
-          font-weight: 900; 
-          font-size: 30px;
-          color: black;
-      }
+  color: var(--luxury-dark) !important;
+  font-style: italic;
+}
       
       .brand-logo-circle {
           width: 50px;
@@ -91,9 +120,57 @@
       }
       
       /* Carousel and Card Styling */
-      #heroCarousel {height: 380px; box-shadow: var(--shadow-premium); max-width: 1400px; margin: 0 auto;}
-      .carousel-item-custom {height: 380px; background-size: cover; background-position: center; position: relative;}
-      .slider-caption{position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-size:48px; font-weight:900; text-shadow:1px 1px 8px rgba(0,0,0,1); background:rgba(0,0,0,.3); color: white; padding: 0;}
+      #heroCarousel {
+    height: 500px; /* Increased height for premium feel */
+    border-radius: 0 0 40px 40px; /* Elegant curved bottom */
+    overflow: hidden;
+}
+
+.carousel-item-custom {
+    height: 500px;
+    transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1); /* Ultra-smooth slide */
+}
+.carousel-item-custom::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
+}
+      .slider-caption {
+    position: absolute;
+    z-index: 10;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: left !important;
+    background: transparent !important;
+    max-width: 600px;
+    padding: 0;
+}
+.slider-caption h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease 0.3s;
+}
+.active .slider-caption h2 {
+    opacity: 1;
+    transform: translateY(0);
+}
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--brand-gold);
+    margin: 0 8px;
+    transition: width 0.3s ease;
+}
+.carousel-indicators .active {
+    width: 30px;
+    border-radius: 10px;
+}
       
       /* General Content Section Styling - Increased Max Width */
       section.content-view{display:none; padding: 30px 15px; max-width: 1400px; margin: 0 auto; min-height: 80vh;}
@@ -149,11 +226,41 @@
 }
       
       /* New Card Styling for more content */
-      .card{background:var(--card-bg);border-radius:var(--card-radius);padding:10px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:transform .2s,box-shadow .2s,background-color .3s; border: 1px solid #f0f0f0; position: relative;}
-      .card:hover{transform:translateY(-3px) scale(1.01);}
+      .card {
+  background: white;
+  border: none !important;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.6s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(142, 111, 62, 0.15);
+}
       .card img{width:100%;height:180px;object-fit:cover;border-radius:8px;}
       .card-body { padding: 10px 5px 0 5px; }
-      .price{font-size:20px;font-weight:700;color:var(--brand-primary);margin-top:4px;}
+      .price {
+        color: var(--brand-gold-dark) !important;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem !important;
+}
+.btn-primary {
+  background-color: var(--luxury-dark) !important;
+  border: none !important;
+  border-radius: 0; /* Sharp edges for a high-fashion look */
+  padding: 12px 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-gold-dark) !important;
+}
       .card-title { font-size: 18px; font-weight: 600; margin-bottom: 5px; }
       
       .card-info { font-size: 13px; color: #6c757d; margin-bottom: 5px; }
@@ -205,6 +312,488 @@
       body.dark-mode header{border-bottom-color: #30363d;}
       body.dark-mode .brand-logo-text, body.dark-mode .header-search, body.dark-mode .header-search input, body.dark-mode .currency-selector{color: var(--text-color) !important; background-color: #30363d !important; border-color: #484f58 !important;}
       body.dark-mode .login-btn{color: #e9996d !important;}
+      /* Custom success state for the Add to Cart button */
+.btn-added-success {
+    background-color: #28a745 !important; /* Elegant Green */
+    border-color: #28a745 !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+/* Optional: Pulse effect when added */
+@keyframes pulse-green {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+.btn-added-success {
+    animation: pulse-green 0.4s ease-in-out;
+}
+/* Clean pulsing dot without any icon */
+.hotspot {
+    position: absolute;
+    width: 18px; /* Small clean dot */
+    height: 18px;
+    background-color: var(--brand-gold);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+    border: 2px solid white;
+    transform: translate(-50%, -50%);
+    display: block; /* Ensures visibility */
+}
+
+/* The actual pulse animation */
+.hotspot-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--brand-gold);
+    border-radius: 50%;
+    z-index: -1;
+    animation: hotspot-pulse-effect 2s infinite;
+}
+
+@keyframes hotspot-pulse-effect {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(3.5);
+        opacity: 0;
+    }
+}
+
+/* Ensure plus icon from previous code is hidden */
+.hotspot i {
+    display: none !important;
+}
+/* Circular Category Card Styling */
+.category-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 10px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+.category-scroll-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.category-circle-card {
+    flex: 0 0 auto;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 100px;
+}
+
+.category-circle-card:hover {
+    transform: translateY(-5px);
+}
+
+.circle-img-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.category-circle-card.active .circle-img-wrapper {
+    border-color: var(--brand-gold);
+    box-shadow: 0 0 15px rgba(184, 156, 109, 0.4);
+    background: #fff8f0;
+}
+
+.category-circle-card p {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    color: #666;
+}
+
+.category-circle-card.active p {
+    color: var(--brand-gold-dark);
+}
+
+.circle-img-wrapper i {
+    font-size: 24px;
+    color: #888;
+}
+
+.category-circle-card.active i {
+    color: var(--brand-gold);
+}
+/* Circular Category Navigation */
+.category-nav-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    justify-content: flex-start; /* Better for mobile scroll */
+    scrollbar-width: none;
+}
+
+.category-nav-container::-webkit-scrollbar {
+    display: none;
+}
+
+.category-item {
+    text-decoration: none !important;
+    color: #666; /* Matching second image text color */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 90px;
+}
+
+.category-circle {
+    width: 80px; /* Matching first image proportions */
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.category-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills the circle as in 3rd picture */
+}
+
+
+
+/* Active State */
+.category-item.active .category-circle {
+    border: 2px solid var(--brand-gold); /* Gold border from 1st picture */
+    box-shadow: 0 0 15px rgba(184, 156, 109, 0.3);
+}
+.category-item.active span {
+    color: var(--brand-gold-dark);
+    font-weight: 600;
+}
+.category-item.active .category-label {
+    color: var(--brand-gold-dark); /* Gold text color from 2nd picture */
+    font-weight: 600;
+}
+
+.category-label {
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+}
+/* Modified 3D Carousel */
+.carousel3d-wrapper {
+  width: 100%;
+  height: 400px; /* Fixed height so it doesn't disappear */
+  perspective: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0;
+  overflow: visible; /* Allow cards to pop out */
+}
+
+.carousel3d-inner {
+  --w: 120px;
+  --h: 180px;
+  --quantity: 10;
+  --translateZ: 250px; /* Distance from center */
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  animation: carousel3d-rotating 20s linear infinite;
+}
+
+@keyframes carousel3d-rotating {
+  from { transform: perspective(1000px) rotateX(-10deg) rotateY(0deg); }
+  to { transform: perspective(1000px) rotateX(-10deg) rotateY(360deg); }
+}
+
+.carousel3d-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  /* This formula creates the circle */
+  transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ));
+  background: rgba(var(--color-card), 0.8);
+  border: 2px solid white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel3d-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+/* --- Functional Artisan Premium Slider --- */
+.artisan-slider-container {
+    position: relative;
+    padding: 40px 0;
+}
+
+.artisan-slider-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 10px;
+}
+.text-danger {
+    color: #ff4d4d !important;
+}
+.artisan-slider-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.artisan-card-custom {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(184, 156, 109, 0.1);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.artisan-card-custom:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(184, 156, 109, 0.15);
+}
+
+.artisan-card-custom img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.artisan-card-custom .artisan-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--brand-gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.artisan-card-custom h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    height: 44px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.artisan-card-custom .artisan-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--brand-gold-dark);
+    margin-bottom: 20px;
+}
+
+.artisan-btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.btn-utility-slider {
+    flex: 1;
+    height: 45px;
+    border: 1px solid #eee;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    color: #666;
+}
+.btn-utility-slider i {
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.btn-utility-slider:hover {
+    border-color: var(--brand-gold);
+    color: var(--brand-gold);
+    background: #fdfbf8;
+}
+
+.btn-add-artisan-slider {
+    flex: 3;
+    background: var(--luxury-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: 0.3s;
+}
+
+.btn-add-artisan-slider:hover {
+    background: var(--brand-gold-dark);
+}
+
+.slider-nav-btns {
+    position: static !important;
+    display: flex !important;
+    gap: 10px;
+}
+
+/* Ensure the slider header is flex */
+.artisan-slider-container .d-flex.justify-content-between {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
+
+.nav-circle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--brand-gold);
+    background: white;
+    color: var(--brand-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.nav-circle-btn:hover {
+    background: var(--brand-gold);
+    color: white;
+}
+.side-nav-btn {
+    position: absolute;
+    top: 55%; /* Centered vertically against the cards */
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background: white;
+    border: 1px solid var(--brand-gold);
+    color: var(--brand-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.side-nav-btn:hover {
+    background: var(--brand-gold);
+    color: white;
+}
+
+/* Positioning them on the far left and far right */
+.btn-prev-side {
+    left: -20px;
+}
+
+.btn-next-side {
+    right: -20px;
+}
+
+/* Hide these on small mobile if they overlap too much */
+@media (max-width: 768px) {
+    .btn-prev-side { left: 5px; }
+    .btn-next-side { right: 5px; }
+}
+/* Color for active heart in the slider */
+
+
+
+/* 1. Glowing Pulse for the ACTIVE category */
+.category-item.active .category-circle {
+    border: 2px solid var(--brand-gold) !important;
+    box-shadow: 0 0 15px rgba(184, 156, 109, 0.6), 
+                0 0 30px rgba(184, 156, 109, 0.2);
+    animation: gold-pulse 2s infinite ease-in-out;
+}
+
+@keyframes gold-pulse {
+    0% { box-shadow: 0 0 10px rgba(184, 156, 109, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(184, 156, 109, 0.8), 0 0 40px rgba(184, 156, 109, 0.2); }
+    100% { box-shadow: 0 0 10px rgba(184, 156, 109, 0.4); }
+}
+
+/* 2. Hover Shimmer Effect */
+.category-item:hover .category-circle {
+    border-color: var(--brand-gold) !important;
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(184, 156, 109, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 3. Add a "Glass Shimmer" overlay on hover */
+.category-circle::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: rotate(30deg);
+    transition: none;
+    pointer-events: none;
+}
+
+.category-item:hover .category-circle::after {
+    left: 120%;
+    transition: all 0.7s ease-in-out;
+}
+
+/* 4. Text Glow */
+.category-item:hover .category-label {
+    color: var(--brand-gold-dark);
+    text-shadow: 0 0 8px rgba(184, 156, 109, 0.3);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+
+
+/* Ensure the slider wrapper doesn't wrap cards vertically */
+
       
       /* Mobile Layout */
       @media (max-width: 991.98px) {
@@ -237,6 +826,7 @@
 <body>
     
     <header>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <div class="new-header-layout">
             
             <div class="header-search">
@@ -254,9 +844,14 @@
             </div>
             
             <div class="header-controls-right">
-                <a href="#orders" class="btn btn-outline-secondary p-2 wishlist-header-btn" style="border: 1px solid #ccc;">
-        <i class="bi bi-bag-check"></i><span class="ms-1 d-none d-lg-inline">Orders</span>
+
+                <a href="my-bookings.html" class="btn btn-outline-secondary p-2 booking-header-btn" style="border: 1px solid #ccc;">
+        <i class="bi bi-calendar-check"></i>
+        <span class="ms-1 d-none d-lg-inline">Bookings</span>
     </a>
+                <a href="#orders" class="btn btn-outline-secondary p-2 wishlist-header-btn" style="border: 1px solid #ccc;">
+                <i class="bi bi-bag-check"></i><span class="ms-1 d-none d-lg-inline">Orders</span>
+                 </a>
               
               
                 <a href="#wishlist" class="btn btn-outline-secondary p-2 wishlist-header-btn" style="border: 1px solid #ccc;">
@@ -277,89 +872,371 @@
     
     <section id="main-catalog-view" class="content-view active">
         
-        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner" id="carouselInner">
-                </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="5000">
+    <div class="carousel-indicators" id="carouselIndicators">
         </div>
-        
-        <section id="decor" class="container-card">
-            <h2 class="text-center mb-4 text-primary">✨ Event Decoration Services</h2>
-            <div class="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
-                <div>
-                    <span class="text-muted d-block d-md-inline">(Click on a card for full details)</span>
-                </div>
-                <div class="d-flex gap-2">
-                    <select id="decorCategoryFilter" class="form-select w-auto" onchange="renderCatalog()">
-                        <option value="All">All Decor Packages</option>
-                        <option value="Marriage">Marriage Decor</option>
-                        <option value="Birthday">Birthday Decor</option>
-                        <option value="Corporate">Corporate Events</option>
-                        <option value="Baby Shower">Baby Shower</option>
-                    </select>
-                    <button class="btn btn-outline-secondary" onclick="clearFilters()">Clear Filters</button>
-                </div>
-            </div>
-            <div class="items-grid" id="decorGrid">
-                <p class="text-muted">Loading decoration packages...</p>
-            </div>
-            <div class="text-center mt-4">
-                <a href="#all-decor" class="btn btn-outline-primary btn-lg" >
-                    <i class="bi bi-grid-fill"></i> View All Decor Packages
-                </a>
-            </div>
-        </section>
 
-        <section id="idols" class="container-card">
-            <h2 class="text-center mb-4 text-primary">🕉️ Artisan Idols & Murtis</h2>
-            <div class="d-flex justify-content-end align-items-center my-3 gap-2">
-                <select id="idolCategoryFilter" class="form-select w-auto" onchange="renderCatalog()">
-                    <option value="All">All Idols</option>
-                    <option value="Ganesh">Ganesh</option>
-                    <option value="Saraswati">Saraswati</option>
-                    <option value="Shiva">Shiva</option>
-                    <option value="Lakshmi">Lakshmi</option>
-                    <option value="Custom">Custom/Services</option>
-                </select>
-                <button class="btn btn-outline-secondary" onclick="clearFilters()">Clear Filters</button>
-            </div>
-            <div class="items-grid" id="idolsGrid">
-                <p class="text-muted">Loading handcrafted idols...</p>
-            </div>
-             <div class="text-center mt-4">
-                 <a href="#all-idols" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-gem"></i> View All Idols & Accessories
-                </a>
-            </div>
-        </section>
+    <div class="carousel-inner" id="carouselInner">
+        </div>
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon p-3 bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
 
-        <section id="services-contact" class="container-card">
-            <h2 class="text-center mb-4 text-primary">🎨 Design Services & Consultations</h2>
-            <p class="lead">We offer bespoke design services for custom idols, unique event themes, and full production planning. Contact us for a detailed consultation.</p>
-            <div class="text-center">
-                <a class="btn btn-primary btn-lg mt-3" href="https://wa.me/919999999999?text=Hello%2C%20I%20would%20like%20to%20enquire%20about%20your%20design%20services." target="_blank">
-                    <i class="bi bi-chat-dots-fill"></i> Discuss My Project
-                </a>
-            </div>
-            <hr class="my-4">
-            <h2 class="text-center mb-4 text-primary">📞 Contact & Location</h2>
-            <p class="lead"><strong>Phone:</strong><a href="tel:+919999999999" class="text-decoration-none text-success">+91-9999999999</a></p>
-            <p class="lead"><strong>Address:</strong> Your Shop Address Here (Open 10 AM - 8 PM)</p>
-        </section>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon p-3 bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<div class="sacred-space-wrap my-5 container">
+    <h2 class="text-center mb-4">✨ Shop the Look: The Divine Sanctuary</h2>
+    
+    <div class="position-relative mx-auto overflow-hidden rounded-4 shadow-lg" style="max-width: 800px; height: 300px; background: #fdfbf8;">
         
-    </section>
+        <img src="index.png" class="w-100 h-100 d-block" alt="Temple Setup" style="object-fit: cover; filter: brightness(0.9);">
+
+        <div class="hotspot" style="top: 60%; left: 25%;" onclick="openProductDetail('i1')">
+            <span class="hotspot-pulse"></span>
+        </div>
+
+        <div class="hotspot" style="top: 60%; left: 50%;" onclick="openProductDetail('i12')">
+            <span class="hotspot-pulse"></span>
+        </div>
+
+        <div class="hotspot" style="top: 60%; left: 75%;" onclick="openProductDetail('d1')">
+            <span class="hotspot-pulse"></span>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg px-5 shadow-sm" onclick="addBundleToCart(['i1', 'i12', 'd1'])">
+            <i class="bi bi-stars"></i> Buy Complete Look (Save 5%)
+        </button>
+    </div>
+</div>
+<div class="container-card mt-5">
+        <h2 class="text-center mb-4 text-primary">✨ Event Decoration Services</h2>
+        
+        <div class="category-nav-container mb-4" id="decorCategoryNav">
+            <a class="category-item active" onclick="filterDecorByCategory(event, 'All')">
+                <div class="category-circle"><i class="bi bi-grid-3x3-gap fs-3"></i></div>
+                <span class="category-label">All</span>
+            </a>
+            <a href="marriage.html" class="category-item">
+    <div class="category-circle"><img src="https://picsum.photos/100?random=1" alt="Marriage"></div>
+    <span class="category-label">Marriage</span>
+        </a>
+            
+        <a href="Engagement.html" class="category-item">
+    <div class="category-circle">
+        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=200" alt="Engagement">
+    </div>
+    <span class="category-label">Engagement</span>
+    </a>
+     <a href="Birthday.html" class="category-item">
+    <div class="category-circle">
+        <img src="https://picsum.photos/100?random=2" alt="Birthday">
+    </div>
+    <span class="category-label">Birthday</span>
+    </a>
+            <a class="category-item" onclick="filterDecorByCategory(event, 'Cultural')">
+        <div class="category-circle">
+            <img src="https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=200" alt="Haldi">
+        </div>
+        <span class="category-label">Haldi/Mehendi</span>
+    </a>
+    <a class="category-item" onclick="filterDecorByCategory(event, 'Reception')">
+        <div class="category-circle">
+            <img src="https://images.unsplash.com/photo-1478146059778-26028b07395a?w=200" alt="Reception">
+        </div>
+        <span class="category-label">Reception</span>
+    </a>
+    <a class="category-item" onclick="filterDecorByCategory(event, 'Anniversary')">
+        <div class="category-circle">
+            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=200" alt="Anniversary">
+        </div>
+        <span class="category-label">Anniversary</span>
+    </a>
+    <a class="category-item" onclick="filterDecorByCategory(event, 'Marriage')">
+        <div class="category-circle"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=200" alt="Car"></div>
+        <span class="category-label">Car Decor</span>
+    </a>
+    <a class="category-item" onclick="filterDecorByCategory(event, 'Marriage')">
+        <div class="category-circle"><img src="https://images.unsplash.com/photo-1478146059778-26028b07395a?w=200" alt="Welcome"></div>
+        <span class="category-label">Entry Decor</span>
+    </a>
+    <a class="category-item" onclick="filterDecorByCategory(event, 'Engagement')">
+        <div class="category-circle"><img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=200" alt="Proposal"></div>
+        <span class="category-label">Surprise Proposal</span>
+    </a>
+            <a class="category-item" onclick="filterDecorByCategory(event, 'Corporate')">
+                <div class="category-circle"><img src="https://picsum.photos/100?random=3" alt="Corporate"></div>
+                <span class="category-label">Corporate</span>
+            </a>
+            <a class="category-item" onclick="filterDecorByCategory(event, 'Baby Shower')">
+                <div class="category-circle"><img src="https://picsum.photos/100?random=4" alt="Baby Shower"></div>
+                <span class="category-label">Baby Shower</span>
+            </a>
+            <a class="category-item" onclick="filterDecorByCategory(event, 'Lighting & Furnishings')">
+                <div class="category-circle"><img src="https://picsum.photos/100?random=5" alt="Lighting"></div>
+                <span class="category-label">Lighting</span>
+            </a>
+        </div>
+
+        <div class="items-grid" id="decorGrid">
+            </div>
+        
+        <div class="text-end mt-5">
+    <a href="#all-decor" class="btn btn-outline-primary px-5 py-2 rounded-0">
+        View All Decor Packages &rarr;
+    </a>
+</div>
+    </div>
+
+    <div class="container-card mb-5">
+        <h2 class="text-center mb-4 text-primary">🕉️ Artisan Idols & Murtis</h2>
+        
+        <div class="d-flex justify-content-end mb-3 px-3">
+            <select class="form-select w-auto" id="idolCategoryFilter" onchange="renderCatalog()">
+                <option value="All">All Idols</option>
+                <option value="Ganesh">Ganesh</option>
+                <option value="Saraswati">Saraswati</option>
+                <option value="Lakshmi">Lakshmi</option>
+                <option value="Shiva">Shiva</option>
+                <option value="Kali">Kali</option>
+                <option value="Manasa">Manasa</option>
+                <option value="Durga">Durga</option>
+                <option value="Krishna">Krishna</option>
+                <option value="kartika">kartika</option>
+                <option value="biswakarma">biswakarma</option>
+                <option value="jagannath">Jagannath</option>
+            </select>
+        </div>
+
+        <div class="items-grid" id="idolsGrid">
+            </div>
+
+        <div class="d-flex justify-content-end mt-5">
+    <a href="#all-idols" class="btn btn-outline-primary px-5 py-2 rounded-0">
+        View All Idols & Accessories &rarr;
+    </a>
+</div>
+    </div>
+
+<section class="container artisan-slider-container">
+    <div class="mb-4 px-2">
+        <h6 class="text-uppercase mb-1" style="color: var(--brand-gold); letter-spacing: 2px; font-size: 11px;">Curated Collection</h6>
+        <h2 class="mb-0" style="font-family: 'Playfair Display', serif;">Artisan Pooja Essentials</h2>
+    </div>
+
+    <button class="side-nav-btn btn-prev-side" onclick="document.getElementById('artisanFlow').scrollBy({left: -350, behavior: 'smooth'})">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="side-nav-btn btn-next-side" onclick="document.getElementById('artisanFlow').scrollBy({left: 350, behavior: 'smooth'})">
+        <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <div class="artisan-slider-wrapper" id="artisanFlow">
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Handcrafted Brass</div>
+            <img src="https://picsum.photos/400/300?random=35" onclick="openProductDetail('i12')">
+            <h4>Aarti Diya — Five-Wick Brass</h4>
+            <div class="artisan-price">₹850.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i12')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i12')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i12')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Sacred Accessories</div>
+            <img src="https://picsum.photos/400/300?random=36" onclick="openProductDetail('i13')">
+            <h4>Authentic Rudraksha Mala (108+1)</h4>
+            <div class="artisan-price">₹450.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i13')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i13')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i13')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Pooja Rituals</div>
+            <img src="https://picsum.photos/400/300?random=37" onclick="openProductDetail('i14')">
+            <h4>Pure Copper Kalash / Pooja Pot</h4>
+            <div class="artisan-price">₹1,100.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i14')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i14')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i14')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Spiritual Decor</div>
+            <img src="https://picsum.photos/400/300?random=39" onclick="openProductDetail('i16')">
+            <h4>Engraved Gemstone Sri Yantra</h4>
+            <div class="artisan-price">₹3,200.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i16')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i16')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i16')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Clay Idols</div>
+            <img src="https://picsum.photos/400/300?random=15" onclick="openProductDetail('i1')">
+            <h4>Ganesh Idol — Eco Clay</h4>
+            <div class="artisan-price">₹1,899.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i1')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i1')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i1')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Resin Art</div>
+            <img src="https://picsum.photos/400/300?random=32" onclick="openProductDetail('i9')">
+            <h4>Lakshmi Idol — Marble Finish</h4>
+            <div class="artisan-price">₹3,800.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i9')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i9')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i9')">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="artisan-card-custom">
+            <div class="artisan-tag">Polyresin</div>
+            <img src="https://picsum.photos/400/300?random=30" onclick="openProductDetail('i7')">
+            <h4>Radha-Krishna Idol</h4>
+            <div class="artisan-price">₹4,999.00</div>
+            <div class="artisan-btn-group">
+                <button class="btn-utility-slider" onclick="toggleWishlistSlider(event, 'i7')"><i class="bi bi-heart"></i></button>
+                <button class="btn-utility-slider" onclick="shareProduct(event, 'i7')"><i class="bi bi-share"></i></button>
+                <button class="btn-add-artisan-slider" onclick="addToCart(event, 'i7')">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+        
+<div class="carousel3d-wrapper">
+  <div class="carousel3d-inner" style="--quantity: 10;">
+    <div class="carousel3d-card" style="--index: 0; --color-card: 184, 156, 109;">
+        <img src="https://picsum.photos/200/300?random=1" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 1; --color-card: 142, 252, 204;">
+        <img src="https://picsum.photos/200/300?random=2" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 2; --color-card: 142, 252, 157;">
+        <img src="https://picsum.photos/200/300?random=3" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 3; --color-card: 215, 252, 142;">
+        <img src="https://picsum.photos/200/300?random=4" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 4; --color-card: 252, 252, 142;">
+        <img src="https://picsum.photos/200/300?random=5" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 5; --color-card: 252, 208, 142;">
+        <img src="https://picsum.photos/200/300?random=6" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 6; --color-card: 252, 142, 142;">
+        <img src="https://picsum.photos/200/300?random=7" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 7; --color-card: 252, 142, 239;">
+        <img src="https://picsum.photos/200/300?random=8" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 8; --color-card: 204, 142, 252;">
+        <img src="https://picsum.photos/200/300?random=9" class="carousel3d-img">
+    </div>
+    <div class="carousel3d-card" style="--index: 9; --color-card: 142, 202, 252;">
+        <img src="https://picsum.photos/200/300?random=10" class="carousel3d-img">
+    </div>
+  </div>
+</div>
+
+
+<section class="premium-spotlight py-5" style="background: #fdfbf8; border-top: 1px solid #e9996d44;">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 order-2 order-lg-1">
+                <h6 class="text-uppercase tracking-widest mb-3" style="color: var(--brand-gold); letter-spacing: 3px;">The Heritage</h6>
+                <h2 class="display-4 mb-4" style="font-family: 'Playfair Display', serif;">Sculpting Divinity, <br><span class="fst-italic text-muted">Since 1984</span></h2>
+                <p class="lead text-secondary mb-4">Each idol undergoes a 14-day purification and sculpting process. We don't just sell statues; we deliver the soul of Kumartuli to your doorstep.</p>
+                <div class="d-flex gap-4 mb-4">
+                    <div class="stat-item">
+                        <h4 class="mb-0 fw-bold">40+</h4>
+                        <small class="text-muted">Hours per Idol</small>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="stat-item">
+                        <h4 class="mb-0 fw-bold">100%</h4>
+                        <small class="text-muted">Eco-Friendly</small>
+                    </div>
+                </div>
+                <button class="btn btn-primary px-5 py-3">Explore the Process</button>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800" class="img-fluid rounded-circle shadow-lg" alt="Artisan at work" style="border: 15px solid white;">
+                    <div class="position-absolute bottom-0 start-0 p-4 bg-white shadow-lg rounded-4 d-none d-md-block" style="transform: translate(-20%, -20%); max-width: 250px;">
+                        <p class="mb-0 fst-italic small text-dark">"The clay remembers every touch of the artist's hand."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container my-5 py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="heritage.jpg" class="img-fluid rounded-4 shadow" alt="Craftsmanship">
+        </div>
+        <div class="col-md-6 ps-md-5">
+            <h6 class="text-uppercase text-muted letter-spacing-2">Our Heritage</h6>
+            <h2 class="display-5 mb-4">Every Murti tells a sacred story.</h2>
+            <p class="lead">Our artisans spend over 40 hours on every single idol, ensuring that the divine grace is captured in every curve of the clay.</p>
+            <button class="btn btn-outline-dark mt-3 px-4">Watch the Process</button>
+        </div>
+    </div>
+</section>
+<div class="bg-white border-top border-bottom py-4 my-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
+                <i class="bi bi-truck fs-2 text-gold"></i>
+                <h6 class="mt-2">Safe Transit</h6>
+                <p class="small text-muted">Wooden crate packaging</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-shield-check fs-2 text-gold"></i>
+                <h6 class="mt-2">Authentic Art</h6>
+                <p class="small text-muted">Certified Artisans</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-flower1 fs-2 text-gold"></i>
+                <h6 class="mt-2 fw-bold">Eco-Friendly</h6>
+                <p class="small text-muted">Natural river clay & organic colors</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-lock fs-2 text-gold"></i>
+                <h6 class="mt-2 fw-bold">Secure Pay</h6>
+                <p class="small text-muted">UPI, Cards & COD Protected</p>
+            </div>
+            
+            </div>
+    </div>
+</div>
+
+        
+        
+</section>
 
     <section id="all-decor-view" class="content-view">
         <div class="d-flex justify-content-between align-items-center pt-3 pb-4">
@@ -493,7 +1370,7 @@
     
     
     <footer>
-        <p onclick="openAdmin()" style="cursor: pointer;" title="Click for Admin Panel">© 2025 The Artisan Store. All Rights Reserved. Prototype v3.0</p>
+        <p>© 2025 The Artisan Store. All Rights Reserved.</p>
     </footer>
 
     <a class="whatsapp-btn-fixed" href="https://wa.me/919999999999?text=Hello%2C%20I%20have%20an%20enquiry%20about%20your%20products." target="_blank" title="Chat on WhatsApp">
@@ -508,10 +1385,17 @@
                     <div class="col-md-7">
                         <p class="lead" id="productDetailCategory"></p><h3 class="text-success" id="productDetailPrice"></h3><hr/>
                         <p id="productDetailDescription"></p>
-                        <div class="d-flex gap-2">
-                            <button id="modalBuyButton" class="btn btn-success btn-lg mt-3"><i class="bi bi-bag-fill"></i> Buy Now</button>
-                            <button id="modalEnquiryButton" class="btn btn-primary btn-lg mt-3"><i class="bi bi-telephone-fill"></i> Enquire</button>
-                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+    <button id="modalAddToCartButton" class="btn btn-success btn-lg mt-3">
+        <i class="bi bi-cart-plus-fill"></i> Add to Cart
+    </button>
+    <a href="#cart" id="modalViewCartButton" class="btn btn-outline-primary btn-lg mt-3" style="display: none;" data-bs-dismiss="modal">
+        <i class="bi bi-eye-fill"></i> View Cart
+    </a>
+    <button id="modalEnquiryButton" class="btn btn-primary btn-lg mt-3">
+        <i class="bi bi-telephone-fill"></i> Enquire
+    </button>
+</div>
                     </div>
                 </div>
             </div>
@@ -533,42 +1417,42 @@
         </div>
     </div>
     
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white"><h5 class="modal-title">🔐 Admin Panel — Products & Bookings</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                <div class="modal-body">
-                    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
-                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabProducts">Products</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabBookings">Bookings</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabSettings">Settings</button></li>
-                    </ul>
-                    <div class="tab-content pt-3">
-                        <div class="tab-pane fade show active" id="tabProducts">
-                            <div class="d-flex justify-content-between align-items-center mb-3"><h6>Manage Products</h6><button class="btn btn-primary" onclick="showProductForm()">+ Add Product</button></div>
-                            <div id="adminProductsList" class="row g-3"></div>
-                            <div id="productForm" style="display: none" class="mt-3">
-                                <h6 id="productFormTitle">Add Product</h6>
-                                <div class="row g-2">
-                                    <div class="col-md-4"><input id="p_title" class="form-control" placeholder="Title"/></div>
-                                    <div class="col-md-2"><input id="p_price" class="form-control" placeholder="Price (₹)" type="number"/></div>
-                                    <div class="col-md-3"><input id="p_image" class="form-control" placeholder="Image URL (e.g., ganesh.jpg)"/></div>
-                                    <div class="col-md-3"><select id="p_category" class="form-select"><option>Decor</option><option>Idol</option><option>Other</option></select></div>
-                                    <div class="col-12"><textarea id="p_desc" class="form-control" rows="2" placeholder="Description"></textarea></div>
-                                    <div class="col-12 d-flex gap-2"><button class="btn btn-success" onclick="saveProduct()">Save</button><button class="btn btn-secondary" onclick="hideProductForm()">Cancel</button></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="tabBookings"><h6>Recent Bookings</h6><div id="adminBookingsList"></div></div>
-                        <div class="tab-pane fade" id="tabSettings"><h6>Settings & Integrations</h6><p><strong>Payment Integration:</strong> Stripe & Razorpay placeholders. This requires server-side setup for production.</p><p><strong>WordPress Export:</strong> Use the theme skeleton to convert the site.</p><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="useMockPayment" checked/><label class="form-check-label" for="useMockPayment">Use mock payment (test) mode</label></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+
     <script>
+  function toggleWishlistSlider(event, id) {
+    event.stopPropagation();
+    
+    // 1. Logic to add/remove from global wishlist
+    addToWishlist(event, id);
+    
+    // 2. Visual Feedback
+    const btn = event.currentTarget;
+    const icon = btn.querySelector('i');
+    
+    // Get latest wishlist from localStorage
+    let wishlist = JSON.parse(localStorage.getItem("art_wishlist_v3")) || [];
+    const isInWishlist = wishlist.some(item => item.id === id);
+    
+    if (isInWishlist) {
+        // TURN RED
+        icon.className = "bi bi-heart-fill text-danger";
+    } else {
+        // TURN BACK TO GRAY
+        icon.className = "bi bi-heart";
+    }
+}
+
+// Updated find function to ensure it searches the correct array
+function findProductById(id) {
+    return DEFAULT_PRODUCTS.find(p => p.id === id);
+}
+    </script>
+
+    <script>
+        
 /* ---------------------------------------------------------
     DATABASE + DEFAULT DATA (30 products)
 --------------------------------------------------------- */
@@ -584,14 +1468,8 @@ const DEFAULT_PRODUCTS = [
     { id: "d2", title: "Outdoor Wedding Mandap Setup", price: 22000, img: "https://picsum.photos/1200/400?random=12", category: "Marriage", desc: "Elegant garden-themed mandap setup with fresh flowers and sheer fabrics.", rating: 4.5, purchases: 28, stock: 99, tags: ["Event", "Outdoor"] },
     { id: "d3", title: "First Birthday Jungle Theme", price: 4500, img: "https://picsum.photos/1200/400?random=13", category: "Birthday", desc: "Fun, vibrant jungle animal theme with a large backdrop and custom balloon arch.", rating: 4.9, purchases: 45, stock: 99, tags: ["Event", "Kids"] },
     { id: "d4", title: "Teen's Neon Glow Party Decor", price: 6000, img: "https://picsum.photos/1200/400?random=14", category: "Birthday", desc: "Blacklight-reactive decorations and sound system for a memorable teen party.", rating: 4.7, purchases: 12, stock: 99, tags: ["Event", "Modern"] },
-    { id: "i1", title: "Ganesh Idol — Eco-friendly Clay", price: 1899, img: "https://picsum.photos/1200/400?random=15", category: "Ganesh", desc: "Medium-sized, beautifully sculpted Ganesh murti, made with natural, dissolvable clay.", rating: 4.9, purchases: 112, stock: 50, tags: ["Idol", "Clay"] },
-    { id: "i2", title: "Large Brass Ganesh Murti", price: 9500, img: "https://picsum.photos/1200/400?random=16", category: "Ganesh", desc: "Heavy brass idol, perfect for home temples, with intricate traditional carvings.", rating: 4.6, purchases: 25, stock: 15, tags: ["Idol", "Brass"] },
-    { id: "i3", title: "Saraswati Idol — Pure White Marble", price: 2499, img: "https://picsum.photos/1200/400?random=17", category: "Saraswati", desc: "A serene, white marble-finish Saraswati idol, ideal for students and artists.", rating: 4.8, purchases: 88, stock: 35, tags: ["Idol", "Marble"] },
-    { id: "i4", title: "Custom Idol — Design Consultation", price: 500, img: "https://picsum.photos/1200/400?random=18", category: "Custom", desc: "A booking fee for a 1-hour consultation with our master sculptor for a unique, custom-made idol.", rating: 5.0, purchases: 5, stock: 999, tags: ["Service", "Custom"] },
     { id: "d5", title: "Corporate Event Setup - Modern", price: 15000, img: "https://picsum.photos/1200/400?random=19", category: "Corporate", desc: "Sleek, professional decor package including stage design, minimalist lighting, and branded backdrops.", rating: 4.6, purchases: 8, stock: 99, tags: ["Event", "Corporate"] },
     { id: "d6", title: "Baby Shower Pastel Theme", price: 3200, img: "https://picsum.photos/1200/400?random=20", category: "Baby Shower", desc: "Charming pastel-themed decor with balloon clouds, floral arrangements, and 'Mom-to-Be' chair setup.", rating: 4.7, purchases: 35, stock: 99, tags: ["Event", "Kids"] },
-    { id: "i5", title: "Durga Maa Idol — Fiber Reinforced Plastic (FRP)", price: 7999, img: "https://picsum.photos/1200/400?random=21", category: "Durga", desc: "Vibrant, lightweight FRP idol of Maa Durga, highly detailed and suitable for long-term display or large pandals.", rating: 4.7, purchases: 18, stock: 10, tags: ["Idol", "FRP"] },
-    { id: "i6", title: "Small Shiva Lingam — Black Granite", price: 2999, img: "https://picsum.photos/1200/400?random=22", category: "Shiva", desc: "Authentic, hand-polished black granite Shiva Lingam, ideal for personal daily worship (Pooja).", rating: 4.9, purchases: 62, stock: 20, tags: ["Idol", "Stone"] },
     { id: "d7", title: "Vintage Theme Engagement Party Decor", price: 18000, img: "https://picsum.photos/1200/400?random=23", category: "Marriage", desc: "Rustic chic decor with antique lace, distressed wood signs, and warm Edison bulb lighting.", rating: 4.6, purchases: 18, stock: 99, tags: ["Event", "Vintage"] },
     { id: "d8", title: "Half-Saree/Pattu Langa Ceremony Decor", price: 11000, img: "https://picsum.photos/1200/400?random=24", category: "Cultural", desc: "Traditional South Indian decor with marigold flowers, banana leaves, and vibrant silk draping.", rating: 4.9, purchases: 32, stock: 99, tags: ["Event", "Cultural"] },
     { id: "d9", title: "Superhero Kids Birthday Party", price: 5500, img: "https://picsum.photos/1200/400?random=25", category: "Birthday", desc: "Action-packed theme with city backdrop, character cutouts, and custom cape station.", rating: 4.7, purchases: 55, stock: 99, tags: ["Event", "Kids"] },
@@ -599,12 +1477,20 @@ const DEFAULT_PRODUCTS = [
     { id: "d11", title: "Festival Pop-Up Stall Setup", price: 3000, img: "https://picsum.photos/1200/400?random=27", category: "Festival", desc: "Quick and easy-to-assemble canopy, banner stand, and foldable table for market festivals.", rating: 4.4, purchases: 75, stock: 99, tags: ["Event", "Festival"] },
     { id: "d12", title: "LED Furniture Rental Package", price: 12000, img: "https://picsum.photos/1200/400?random=28", category: "Lighting & Furnishings", desc: "Includes 4 LED cubes, 2 LED cocktail tables, and 1 LED bar counter with remote color control.", rating: 4.8, purchases: 15, stock: 99, tags: ["Event", "Modern"] },
     { id: "d13", title: "Photo Booth Backdrop & Props Kit", price: 2500, img: "https://picsum.photos/1200/400?random=29", category: "Accessories", desc: "Glittering sequin backdrop (8x8 ft) with a box of 50 themed novelty props.", rating: 4.9, purchases: 95, stock: 99, tags: ["Event", "Accessories"] },
+    { id: "i1", title: "Ganesh Idol — Eco-friendly Clay", price: 1899, img: "https://picsum.photos/1200/400?random=15", category: "Ganesh", desc: "Medium-sized, beautifully sculpted Ganesh murti, made with natural, dissolvable clay.", rating: 4.9, purchases: 112, stock: 50, tags: ["Idol", "Clay"] },
+    { id: "i2", title: "Large Brass Ganesh Murti", price: 9500, img: "https://picsum.photos/1200/400?random=16", category: "Ganesh", desc: "Heavy brass idol, perfect for home temples, with intricate traditional carvings.", rating: 4.6, purchases: 25, stock: 15, tags: ["Idol", "Brass"] },
+    { id: "i3", title: "Saraswati Idol — Pure White Marble", price: 2499, img: "https://picsum.photos/1200/400?random=17", category: "Saraswati", desc: "A serene, white marble-finish Saraswati idol, ideal for students and artists.", rating: 4.8, purchases: 88, stock: 35, tags: ["Idol", "Marble"] },
+    { id: "i4", title: "Custom Idol — Design Consultation", price: 500, img: "https://picsum.photos/1200/400?random=18", category: "Custom", desc: "A booking fee for a 1-hour consultation with our master sculptor for a unique, custom-made idol.", rating: 5.0, purchases: 5, stock: 999, tags: ["Service", "Custom"] },
+    
+    { id: "i5", title: "Durga Maa Idol — Fiber Reinforced Plastic (FRP)", price: 7999, img: "https://picsum.photos/1200/400?random=21", category: "Durga", desc: "Vibrant, lightweight FRP idol of Maa Durga, highly detailed and suitable for long-term display or large pandals.", rating: 4.7, purchases: 18, stock: 10, tags: ["Idol", "FRP"] },
+    { id: "i6", title: "Small Shiva Lingam — Black Granite", price: 2999, img: "https://picsum.photos/1200/400?random=22", category: "Shiva", desc: "Authentic, hand-polished black granite Shiva Lingam, ideal for personal daily worship (Pooja).", rating: 4.9, purchases: 62, stock: 20, tags: ["Idol", "Stone"] },
+    
     { id: "i7", title: "Radha-Krishna Idol — Polyresin", price: 4999, img: "https://picsum.photos/1200/400?random=30", category: "Krishna", desc: "Hand-painted, colorful polyresin idol of Radha and Krishna, ideal for living room or temple niche.", rating: 4.7, purchases: 40, stock: 25, tags: ["Idol", "Polyresin"] },
     { id: "i8", title: "Hanuman Murti — Red Terracotta", price: 1599, img: "https://picsum.photos/1200/400?random=31", category: "Hanuman", desc: "Vigorous pose Hanuman idol, crafted from traditional fired terracotta, medium size.", rating: 4.6, purchases: 70, stock: 30, tags: ["Idol", "Terracotta"] },
     { id: "i9", title: "Lakshmi Idol — Marble Finish", price: 3800, img: "https://picsum.photos/1200/400?random=32", category: "Lakshmi", desc: "Goddess Lakshmi sitting on a lotus, featuring a smooth, marble-like finish on a durable resin base.", rating: 4.8, purchases: 65, stock: 22, tags: ["Idol", "Resin"] },
     { id: "i10", title: "Buddha Statue — Meditating Stone", price: 6500, img: "https://picsum.photos/1200/400?random=33", category: "Buddhist", desc: "Large, serene meditating Buddha statue, made from weather-resistant composite stone for gardens or indoor use.", rating: 4.9, purchases: 20, stock: 12, tags: ["Idol", "Stone"] },
     { id: "i11", title: "Miniature Set of Nava Graha Idols", price: 1200, img: "https://picsum.photos/1200/400?random=34", category: "Zodiac/Planets", desc: "A set of nine small idols representing the nine celestial bodies, essential for certain Pujas.", rating: 4.5, purchases: 48, stock: 40, tags: ["Idol", "Pooja"] },
-    { id: "i12", title: "Aarti Diya (Lamp) — Five-Wick Brass", price: 850, img: "https://picsum.photos/1200/400?random=35", category: "Religious Accessories", desc: "Traditional five-wick oil lamp (Panchmukhi Diya), crafted from high-quality polished brass.", rating: 4.9, purchases: 150, stock: 50, tags: ["Accessory", "Brass"] },
+    { id: "i12", title: "Aarti Diya — Five-Wick Brass", price: 850, img: "https://picsum.photos/1200/400?random=35", category: "Religious Accessories", desc: "Traditional five-wick oil lamp (Panchmukhi Diya), crafted from high-quality polished brass.", rating: 4.9, purchases: 150, stock: 50, tags: ["Accessory", "Brass"] },
     { id: "i13", title: "Rudraksha Mala — 108+1 Beads", price: 450, img: "https://picsum.photos/1200/400?random=36", category: "Religious Accessories", desc: "Authentic, medium-sized Rudraksha beads strung for chanting and wearing.", rating: 4.7, purchases: 180, stock: 100, tags: ["Accessory", "Pooja"] },
     { id: "i14", title: "Kalash/Pooja Pot — Copper", price: 1100, img: "https://picsum.photos/1200/400?random=37", category: "Religious Accessories", desc: "Essential Pooja vessel, made of pure polished copper with a wide base and narrow neck.", rating: 4.8, purchases: 90, stock: 30, tags: ["Accessory", "Copper"] },
     { id: "i15", title: "Vastu Shastra Consultation Service", price: 7500, img: "https://picsum.photos/1200/400?random=38", category: "Service", desc: "In-depth, full-day consultation for residential or commercial property layout based on Vastu principles.", rating: 5.0, purchases: 3, stock: 99, tags: ["Service", "Vastu"] },
@@ -687,13 +1573,10 @@ function generateExtraProducts(prefix, count, isDecor) {
 }
 
 // Function to get ALL products (default + generated)
+// REPLACE your old getAllProducts with this:
 function getAllProducts() {
-    const defaultProducts = loadProducts();
-    // Generate up to 50 extra decor and 50 extra idol products for demonstration
-    const extraDecor = generateExtraProducts("d_extra", 50, true);
-    const extraIdols = generateExtraProducts("i_extra", 50, false);
-    
-    return [...defaultProducts, ...extraDecor, ...extraIdols];
+    // This only returns your real products, no extra fake ones.
+    return loadProducts(); 
 }
 
 function findProductById(id) {
@@ -753,7 +1636,6 @@ function updateWishlistCount() {
 function addToCart(event, id) {
     event.stopPropagation(); 
     
-    // Uses the universal finder
     const product = findProductById(id);
     if (!product) return;
     
@@ -768,15 +1650,61 @@ function addToCart(event, id) {
     
     saveCart(cart);
 
-    // Blinking Effect for visual feedback
-    const card = event.currentTarget.closest('.card');
+    // --- BUTTON TRANSFORMATION LOGIC ---
+    const btn = event.currentTarget;
+    const originalContent = btn.innerHTML; // Saves the "Add to Cart" text/icon
+
+    // 1. Change appearance to "Added" state
+    btn.classList.add('btn-added-success'); // Add a custom green class
+    btn.innerHTML = `<i class="bi bi-check-circle-fill"></i> Added!`;
+    btn.disabled = true; // Briefly disable to prevent double-clicks
+
+    // 2. Visual Blinking Effect on the Card
+    const card = btn.closest('.card');
     if (card) {
         card.classList.add('cart-flash-active');
-        // Remove the class after 1.5 seconds (matches CSS animation duration)
-        setTimeout(() => {
-            card.classList.remove('cart-flash-active');
-        }, 1500); 
+        setTimeout(() => card.classList.remove('cart-flash-active'), 1500);
     }
+
+    // 3. Revert back to original state after 2 seconds
+    setTimeout(() => {
+        btn.classList.remove('btn-added-success');
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }, 2000);
+}
+// --- Place this right after the addToCart function ---
+
+function addBundleToCart(productIds) {
+    // 1. Loop through each ID in the bundle array
+    productIds.forEach(id => {
+        const product = findProductById(id);
+        if (product) {
+            let cart = loadCart(); // Load latest items from storage
+            let cartItem = cart.find(item => item.id === id);
+            
+            if (cartItem) {
+                cartItem.quantity += 1; // Increase quantity if already in cart
+            } else {
+                // Add new item if not in cart
+                cart.push({ 
+                    id: id, 
+                    title: product.title, 
+                    price: product.price, 
+                    img: product.img, 
+                    quantity: 1 
+                });
+            }
+            saveCart(cart); // Save back to LocalStorage
+        }
+    });
+    
+    // 2. Update the numbers on the cart icons
+    updateCartCount();
+
+    // 3. Tell the user it worked and go to the cart page
+    alert("The 'Divine Sanctuary' bundle has been added to your cart!");
+    window.location.hash = '#cart';
 }
 
 function addToWishlist(event, id) {
@@ -1005,46 +1933,50 @@ function renderCartPage() {
  * The Master Renderer: It looks at the Search Box AND both Dropdowns 
  * simultaneously to ensure filters never conflict.
  */
+// --- REPLACE FROM HERE ---
 function renderCatalog() {
     const products = loadProducts(); 
     
-    // 1. Grab current UI states
     const searchInput = document.getElementById("desktopSearchInput");
     const normalizedSearch = searchInput ? searchInput.value.toLowerCase().trim() : "";
     
-    const decorFilter = document.getElementById("decorCategoryFilter") ? document.getElementById("decorCategoryFilter").value : "All";
-    const idolFilter = document.getElementById("idolCategoryFilter") ? document.getElementById("idolCategoryFilter").value : "All";
+    // Safety check: handle missing filter elements
+    const decorFilterEl = document.getElementById("decorCategoryFilter");
+    const idolFilterEl = document.getElementById("idolCategoryFilter");
+    const decorFilter = decorFilterEl ? decorFilterEl.value : "All";
+    const idolFilter = idolFilterEl ? idolFilterEl.value : "All";
 
     const decorGrid = document.getElementById("decorGrid");
     const idolsGrid = document.getElementById("idolsGrid");
 
     if (!decorGrid || !idolsGrid) return;
 
-    // 2. Clear current view
     decorGrid.innerHTML = "";
     idolsGrid.innerHTML = "";
 
     let hasDecor = false;
     let hasIdols = false;
 
-    // 3. Filter and Distribute
     products.forEach(p => {
-        // Condition A: Search Match
         const matchesSearch = p.title.toLowerCase().includes(normalizedSearch) || 
                               p.desc.toLowerCase().includes(normalizedSearch);
         
         if (!matchesSearch) return; 
 
-        const decorCategories = ["Marriage", "Birthday", "Corporate", "Baby Shower", "Cultural", "Festival", "Lighting & Furnishings", "Accessories"];
-        const idolCategories = ["Ganesh", "Saraswati", "Custom", "Durga", "Shiva", "Krishna", "Hanuman", "Lakshmi", "Buddhist", "Zodiac/Planets", "Religious Accessories", "Yantra", "Service"];
+        // --- UPDATE THESE TWO ARRAYS IN YOUR renderCatalog FUNCTION ---
+const decorCategories = ["Marriage", "Birthday", "Corporate", "Baby Shower", "Cultural", "Festival", "Lighting & Furnishings", "Accessories"];
 
-        // Condition B: Category Logic
+const idolCategories = ["Ganesh", "Saraswati", "Custom", "Durga", "Shiva", "Krishna", "Hanuman", "Lakshmi", "Buddhist", "Zodiac/Planets", "Religious Accessories", "Yantra", "Service"];
+
+        // Handle Decorations
         if (decorCategories.includes(p.category)) {
             if (decorFilter === "All" || decorFilter === p.category) {
                 decorGrid.innerHTML += createProductCard(p);
                 hasDecor = true;
             }
-        } else if (idolCategories.includes(p.category)) {
+        } 
+        // Handle Idols
+        else if (idolCategories.includes(p.category) || p.id.startsWith('i')) {
             if (idolFilter === "All" || idolFilter === p.category) {
                 idolsGrid.innerHTML += createProductCard(p);
                 hasIdols = true;
@@ -1052,15 +1984,48 @@ function renderCatalog() {
         }
     });
 
-    // 4. Empty State Handlers
-    if (!hasDecor) {
-        decorGrid.innerHTML = `<p class="col-12 text-muted text-center py-3">No decorations found matching your search/filter.</p>`;
+    if (!hasDecor) decorGrid.innerHTML = `<p class="col-12 text-muted text-center py-3">No setups found.</p>`;
+    if (!hasIdols) idolsGrid.innerHTML = `<p class="col-12 text-muted text-center py-3">No idols found matching your filter.</p>`;
+}
+// --- TO HERE ---
+// --- REPLACE FROM HERE ---
+function filterDecorByCategory(event, category) {
+    if (event) event.preventDefault();
+
+    // Visual selection: highlight the clicked icon
+    const allItems = document.querySelectorAll('.category-item');
+    allItems.forEach(item => item.classList.remove('active'));
+    if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+    // If 'All' is selected, run the standard unified render
+    // --- UPDATE THIS SECTION INSIDE THE products.forEach LOOP ---
+if (decorCategories.includes(p.category)) {
+    if (decorFilter === "All" || decorFilter === p.category) {
+        decorGrid.innerHTML += createProductCard(p);
+        hasDecor = true;
     }
-    if (!hasIdols) {
-        idolsGrid.innerHTML = `<p class="col-12 text-muted text-center py-3">No idols found matching your search/filter.</p>`;
+} else if (idolCategories.includes(p.category) || p.id.startsWith('i')) {
+    // If it's in the idolCategories list OR the ID starts with 'i', show it in Idols
+    if (idolFilter === "All" || idolFilter === p.category) {
+        idolsGrid.innerHTML += createProductCard(p);
+        hasIdols = true;
     }
 }
 
+    const products = loadProducts();
+    const decorGrid = document.getElementById("decorGrid");
+    if (!decorGrid) return;
+
+    decorGrid.innerHTML = "";
+    const filtered = products.filter(p => p.category === category);
+    
+    if (filtered.length > 0) {
+        decorGrid.innerHTML = filtered.map(createProductCard).join('');
+    } else {
+        decorGrid.innerHTML = `<p class="col-12 text-muted text-center py-5">No setups available for ${category} yet.</p>`;
+    }
+}
+// --- TO HERE ---
 /**
  * Triggered by the search input's onkeyup event.
  */
@@ -1098,52 +2063,34 @@ function renderAllDecorPage(searchTerm = "") {
     const products = loadProducts();
     const decorCategories = ["Marriage", "Birthday", "Corporate", "Baby Shower", "Cultural", "Festival", "Lighting & Furnishings", "Accessories"];
     
-    // Combine default and extra products first
     let decorProducts = products.filter(p => decorCategories.includes(p.category));
-    const needed = Math.max(0, 50 - decorProducts.length);
-    if (needed > 0) {
-        decorProducts = decorProducts.concat(generateExtraProducts("d_extra", needed, true));
-    }
 
-    // NEW: Filter by search term
     if (searchTerm) {
         decorProducts = decorProducts.filter(p => 
-            p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            p.category.toLowerCase().includes(searchTerm.toLowerCase())
+            p.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }
 
     const grid = document.getElementById("allDecorGrid");
     if (grid) {
-        grid.innerHTML = decorProducts.length > 0 ? 
-            decorProducts.map(createProductCard).join('') : 
-            `<p class="col-12 text-center py-5 text-muted">No matching decorations found.</p>`;
+        grid.innerHTML = decorProducts.map(createProductCard).join('');
     }
 }
 function renderAllIdolsPage(searchTerm = "") {
     const products = loadProducts();
     const idolCategories = ["Ganesh", "Saraswati", "Custom", "Durga", "Shiva", "Krishna", "Hanuman", "Lakshmi", "Buddhist", "Zodiac/Planets", "Religious Accessories", "Yantra", "Service"];
     
-    // Combine default and extra products first
     let idolProducts = products.filter(p => idolCategories.includes(p.category));
-    const needed = Math.max(0, 50 - idolProducts.length);
-    if (needed > 0) {
-        idolProducts = idolProducts.concat(generateExtraProducts("i_extra", needed, false));
-    }
 
-    // NEW: Filter by search term
     if (searchTerm) {
         idolProducts = idolProducts.filter(p => 
-            p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            p.category.toLowerCase().includes(searchTerm.toLowerCase())
+            p.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }
 
     const grid = document.getElementById("allIdolsGrid");
     if (grid) {
-        grid.innerHTML = idolProducts.length > 0 ? 
-            idolProducts.map(createProductCard).join('') : 
-            `<p class="col-12 text-center py-5 text-muted">No matching idols found.</p>`;
+        grid.innerHTML = idolProducts.map(createProductCard).join('');
     }
 }
 
@@ -1202,85 +2149,52 @@ function router() {
 /* ---------------------------------------------------------
     PRODUCT DETAIL MODAL (Updated to use findProductById)
 --------------------------------------------------------- */
+/* ---------------------------------------------------------
+    PRODUCT DETAIL MODAL (Fixed View Cart Logic)
+--------------------------------------------------------- */
 function openProductDetail(id) {
-    // UPDATED: Use the universal finder
     const p = findProductById(id);
     if (!p) return;
 
+    // 1. Get references to the buttons
+    const addBtn = document.getElementById("modalAddToCartButton");
+    const viewCartBtn = document.getElementById("modalViewCartButton");
+    
+    // 2. Reset buttons to initial state whenever a new product is opened
+    addBtn.style.display = "inline-block";
+    addBtn.innerHTML = `<i class="bi bi-cart-plus-fill"></i> Add to Cart`;
+    viewCartBtn.style.display = "none"; // Hide "View Cart" until added
+
+    // 3. Fill Modal Data
     document.getElementById("productDetailTitle").innerText = p.title;
     document.getElementById("productDetailImage").src = p.img.replace(/1200\/400/, '500/350');
-    document.getElementById("productDetailCategory").innerText = `Category: ${p.category} | Rating: ${p.rating} | Purchases: ${p.purchases}`;
+    document.getElementById("productDetailCategory").innerText = `Category: ${p.category} | Rating: ${p.rating}`;
     document.getElementById("productDetailPrice").innerText = "₹" + p.price.toLocaleString('en-IN');
     document.getElementById("productDetailDescription").innerText = p.desc;
 
-    document.getElementById("modalBuyButton").onclick = () => {
-        alert("Buy option coming soon! Using mock payment (see Admin Panel).");
+    // 4. Add to Cart Click Logic
+    addBtn.onclick = (event) => {
+        // Call your existing addToCart function
+        addToCart(event, p.id); 
+        
+        // Change "Add" button text to show success
+        addBtn.innerHTML = `<i class="bi bi-check-lg"></i> Added!`;
+        
+        // REVEAL the "View Cart" button
+        viewCartBtn.style.display = "inline-block"; 
     };
 
+    // 5. Enquiry Button Logic
     document.getElementById("modalEnquiryButton").onclick = () => {
-        window.location.href = "https://wa.me/919999999999?text=Hello! I want to enquire about " + encodeURIComponent(p.title);
+        window.location.href = "https://wa.me/919999999999?text=Enquiry: " + encodeURIComponent(p.title);
     };
 
+    // 6. Show the Modal
     new bootstrap.Modal(document.getElementById("productDetailModal")).show();
 }
 
-/* ---------------------------------------------------------
-    ADMIN PANEL (Kept only for hidden functionality)
---------------------------------------------------------- */
-// Placeholder functions for admin operations:
-let currentProduct = null;
-function renderAdminProducts() { /* ... */ }
-function renderBookings() { /* ... */ }
-function showProductForm(isEdit = false) { 
-    document.getElementById('productForm').style.display = 'block';
-    document.getElementById('productFormTitle').innerText = isEdit ? 'Edit Product' : 'Add Product';
-}
-function hideProductForm() { 
-    document.getElementById('productForm').style.display = 'none';
-    currentProduct = null;
-}
-function editProduct(id) {
-    currentProduct = loadProducts().find(p => p.id === id);
-    if (!currentProduct) return;
-    document.getElementById('p_title').value = currentProduct.title;
-    document.getElementById('p_price').value = currentProduct.price;
-    document.getElementById('p_image').value = currentProduct.img;
-    document.getElementById('p_category').value = currentProduct.category;
-    document.getElementById('p_desc').value = currentProduct.desc;
-    showProductForm(true);
-}
-function saveProduct() {
-    const newProduct = {
-        id: currentProduct ? currentProduct.id : 'temp-' + Date.now(),
-        title: document.getElementById('p_title').value,
-        price: parseInt(document.getElementById('p_price').value),
-        img: document.getElementById('p_image').value,
-        category: document.getElementById('p_category').value,
-        desc: document.getElementById('p_desc').value,
-        rating: currentProduct ? currentProduct.rating : 4.5,
-        purchases: currentProduct ? currentProduct.purchases : 0,
-        stock: currentProduct ? currentProduct.stock : 10
-    };
-    
-    let products = loadProducts();
-    if (currentProduct) {
-        products = products.map(p => p.id === newProduct.id ? newProduct : p);
-    } else {
-        products.push(newProduct);
-    }
-    saveProducts(products);
-    hideProductForm();
-    renderAdminProducts();
-    alert('Product saved (mock action)');
-}
-function deleteProduct(id) { /* ... */ }
-function openAdmin() {
-    // Only kept for the clickable footer link
-    alert("Admin Panel is a mock interface for this prototype.");
-    // renderAdminProducts();
-    // renderBookings();
-    // new bootstrap.Modal(document.getElementById("adminModal")).show();
-}
+
+
 
 
 /* ---------------------------------------------------------
@@ -1334,17 +2248,78 @@ function googleTranslateElementInit() {
 --------------------------------------------------------- */
 function initCarousel() {
     const slides = [
-        { img: "https://picsum.photos/1200/400?random=1&tag=luxury-marriage", caption: "Grand Events, Perfect Decor" },
-        { img: "https://picsum.photos/1200/400?random=2&tag=luxury-birthday", caption: "Bespoke Themes, Stress-Free Planning" },
-        { img: "https://picsum.photos/1200/400?random=3&tag=handmade-idol", caption: "Divine Idols, Handcrafted Quality" }
+        { img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400", title: "Exquisite Marriage Decor", sub: "Turning your dreams into reality." },
+        { img: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=1400", title: "Handcrafted Divine Idols", sub: "Authentic art for your sacred space." },
+        { img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1400", title: "Luxury Event Planning", sub: "Premium services for corporate excellence." }
     ];
 
     const inner = document.getElementById('carouselInner');
+    const indicators = document.getElementById('carouselIndicators');
+
     inner.innerHTML = slides.map((slide, index) => `
         <div class="carousel-item ${index === 0 ? 'active' : ''} carousel-item-custom" style="background-image: url('${slide.img}')">
-            <div class="slider-caption">${slide.caption}</div>
+            <div class="slider-caption">
+                <h2 class="text-white">${slide.title}</h2>
+                <p class="text-white-50 fs-5">${slide.sub}</p>
+                <a href="#decor" class="btn btn-primary mt-3">Explore Collection</a>
+            </div>
         </div>
     `).join('');
+
+    indicators.innerHTML = slides.map((_, index) => `
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="${index}" 
+        class="${index === 0 ? 'active' : ''}" aria-current="${index === 0}" aria-label="Slide ${index + 1}"></button>
+    `).join('');
+
+    // Re-initialize Bootstrap Carousel specifically to ensure auto-play settings
+    const myCarousel = document.querySelector('#heroCarousel');
+    new bootstrap.Carousel(myCarousel, {
+        interval: 5000, // 5 seconds auto-play
+        ride: 'carousel',
+        pause: 'hover' // Stop auto-play when user mouse is over it
+    });
+}
+function selectDecorCategory(element, category) {
+    // 1. Remove 'active' class from all circles in this row
+    const allCards = document.querySelectorAll('.category-circle-card');
+    allCards.forEach(card => card.classList.remove('active'));
+
+    // 2. Add 'active' class to the clicked circle
+    element.classList.add('active');
+
+    // 3. Since we removed the dropdown, we need to manually set a hidden 
+    // global variable or logic to help renderCatalog()
+    // A quick way is to temporarily create a hidden input or just modify the function.
+    
+    // For simplicity, let's keep your existing logic by mocking the dropdown value:
+    const mockFilter = { value: category };
+    
+    // Update the actual filter function to use this category
+    renderDecorWithCategory(category);
+}
+
+function renderDecorWithCategory(category) {
+    const products = loadProducts();
+    const decorGrid = document.getElementById("decorGrid");
+    if (!decorGrid) return;
+
+    decorGrid.innerHTML = "";
+    let hasDecor = false;
+
+    products.forEach(p => {
+        const decorCategories = ["Marriage", "Birthday", "Corporate", "Baby Shower", "Cultural", "Festival", "Lighting & Furnishings", "Accessories"];
+        
+        if (decorCategories.includes(p.category)) {
+            if (category === "All" || category === p.category) {
+                decorGrid.innerHTML += createProductCard(p);
+                hasDecor = true;
+            }
+        }
+    });
+
+    if (!hasDecor) {
+        decorGrid.innerHTML = `<p class="col-12 text-muted text-center py-3">No setups found for this category.</p>`;
+    }
 }
 
 
@@ -1359,6 +2334,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount();
     updateWishlistCount(); 
 });
+
 
 /* --- NEW CORE LOGIC FOR CHECKOUT, LOCATION, INVOICE & ORDERS --- */
 
@@ -1520,6 +2496,117 @@ function clearAllOrders() {
         renderOrders(); 
     }
 }
+// downloads a styled invoice as a PDF using jsPDF library
+async function downloadInvoice(orderId) {
+    const orders = JSON.parse(localStorage.getItem("art_orders_v3")) || [];
+    const o = orders.find(item => item.id === orderId);
+
+    if (!o) return alert("Order not found!");
+
+    // Create a hidden container for the invoice
+    const element = document.createElement('div');
+    element.style.padding = '40px';
+    element.style.background = '#fff';
+    element.style.color = '#333';
+    element.style.fontFamily = "'Montserrat', sans-serif";
+
+    element.innerHTML = `
+        <div style="border: 2px solid #b89c6d; padding: 30px; border-radius: 10px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: #fdfbf8; border-radius: 50%; border: 1px solid #b89c6d; opacity: 0.3;"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+                <div>
+                    <h1 style="font-family: 'Playfair Display', serif; color: #1a1a1a; margin: 0; font-size: 28px;">The Artisan Store</h1>
+                    <p style="color: #b89c6d; font-weight: 600; letter-spacing: 2px; margin: 5px 0;">OFFICIAL INVOICE</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="margin: 0; font-weight: 600;">Order ID: <span style="color: #b89c6d;">${o.id}</span></p>
+                    <p style="margin: 0; color: #666;">Date: ${o.date}</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+                <div style="background: #fdfbf8; padding: 20px; border-radius: 8px; border-left: 4px solid #b89c6d;">
+                    <h4 style="margin-top: 0; font-size: 14px; color: #8e6f3e;">CUSTOMER DETAILS</h4>
+                    <p style="margin: 5px 0;"><strong>${o.user.name}</strong></p>
+                    <p style="margin: 0; font-size: 13px; color: #555;">${o.user.phone}</p>
+                    <p style="margin: 0; font-size: 13px; color: #555;">${o.user.address}</p>
+                </div>
+                <div style="padding: 20px;">
+                    <h4 style="margin-top: 0; font-size: 14px; color: #8e6f3e;">PAYMENT INFO</h4>
+                    <p style="margin: 5px 0;">Method: <strong>${o.payVia}</strong></p>
+                    <p style="margin: 0;">Status: <span style="color: green; font-weight: bold;">${o.status}</span></p>
+                </div>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                <thead>
+                    <tr style="background: #1a1a1a; color: white;">
+                        <th style="padding: 12px; text-align: left; border-radius: 4px 0 0 4px;">Item Description</th>
+                        <th style="padding: 12px; text-align: center;">Price</th>
+                        <th style="padding: 12px; text-align: center;">Qty</th>
+                        <th style="padding: 12px; text-align: right; border-radius: 0 4px 4px 0;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${o.items.map(item => `
+                        <tr>
+                            <td style="padding: 15px 12px; border-bottom: 1px solid #eee;">${item.title}</td>
+                            <td style="padding: 15px 12px; border-bottom: 1px solid #eee; text-align: center;">₹${item.price.toLocaleString()}</td>
+                            <td style="padding: 15px 12px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
+                            <td style="padding: 15px 12px; border-bottom: 1px solid #eee; text-align: right; font-weight: 600;">₹${(item.price * item.quantity).toLocaleString()}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            <div style="margin-left: auto; width: 250px;">
+                <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                    <span>Subtotal:</span>
+                    <span>₹${(o.total - o.delFee).toLocaleString()}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 5px 0; color: #8e6f3e;">
+                    <span>Delivery Fee:</span>
+                    <span>+ ₹${o.delFee.toLocaleString()}</span>
+                </div>
+                <hr style="border: 0; border-top: 2px solid #1a1a1a; margin: 10px 0;">
+                <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
+                    <span>Grand Total:</span>
+                    <span style="color: #b89c6d;">₹${o.total.toLocaleString()}</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; text-align: center; border-top: 1px dashed #ccc; padding-top: 20px;">
+                <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #888;">Thank you for choosing The Artisan Store!</p>
+                <p style="font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">This is a system generated digital invoice.</p>
+            </div>
+        </div>
+    `;
+
+    // Configuration for the PDF
+    const opt = {
+        margin: 10,
+        filename: `Artisan_Invoice_${o.id}.pdf`,
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 1.2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // New "Wow" loading feedback
+    const btn = document.querySelector(`button[onclick="downloadInvoice('${orderId}')"]`);
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Generating...`;
+
+    try {
+        await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+        console.error("PDF Error:", err);
+    } finally {
+        btn.innerHTML = originalText;
+    }
+}
+
+
 </script>
 <div class="d-md-none fixed-bottom bg-white border-top d-flex justify-content-around align-items-center py-2 shadow-lg" style="z-index: 1050;">
     <a href="#home" class="text-center text-decoration-none text-dark">
@@ -1540,6 +2627,10 @@ function clearAllOrders() {
         <i class="bi bi-bag-check fs-4"></i>
         <div style="font-size: 10px;">Orders</div>
     </a>
+    <a href="my-bookings.html" class="text-center text-decoration-none text-dark d-inline-block">
+    <i class="bi bi-calendar-check fs-4"></i>
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Booking</div>
+</a>
 </div>
 </body>
 </html>
