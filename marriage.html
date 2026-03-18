@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Luxury Collections | The Artisan Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { --brand-gold: #b89c6d; --brand-gold-dark: #8e6f3e; --luxury-dark: #1a1a1a; --parchment: #fdfbf8; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--parchment); color: #333; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        /* Full screen overlay */
+/* Luxury Loader Styles */
+#loader {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.luxury-loader-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ring {
+    position: absolute;
+    border: 2px solid var(--brand-gold);
+    border-radius: 50%;
+    opacity: 0;
+    animation: ring-pulse 3s infinite;
+}
+
+.ring:nth-child(1) { animation-delay: 0s; }
+.ring:nth-child(2) { animation-delay: 1s; }
+.ring:nth-child(3) { animation-delay: 2s; }
+
+@keyframes ring-pulse {
+    0% { width: 50px; height: 50px; opacity: 0; transform: scale(0.5); }
+    30% { opacity: 0.5; }
+    100% { width: 400px; height: 400px; opacity: 0; transform: scale(1.2); border-width: 1px; }
+}
+
+.logo-content { text-align: center; z-index: 10; color: var(--brand-gold); }
+.logo-content i {
+    font-size: 4rem;
+    filter: drop-shadow(0 0 20px rgba(184, 156, 109, 0.8));
+    animation: star-spin 4s infinite linear;
+    display: inline-block;
+}
+
+.brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    margin-top: 20px;
+    background: linear-gradient(to right, #ffffff 20%, #b89c6d 50%, #ffffff 80%);
+    background-size: 200% auto;
+    background-clip: text; /* Standard property */
+-webkit-background-clip: text; /* Vendor prefix for compatibility */
+-webkit-text-fill-color: transparent;
+    animation: shine-text 3s linear infinite;
+}
+
+.loading-bar {
+    width: 120px;
+    height: 1px;
+    background: rgba(184, 156, 109, 0.2);
+    margin: 20px auto 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 100%;
+    background: var(--brand-gold);
+    position: absolute;
+    left: -100%;
+    animation: progress-move 2s infinite ease-in-out;
+}
+
+@keyframes star-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes shine-text { to { background-position: 200% center; } }
+@keyframes progress-move {
+    0% { left: -100%; }
+    50% { left: 0%; }
+    100% { left: 100%; }
+}
+        .filter-pill { border: 1px solid #ddd; background: white; color: #666; border-radius: 50px; padding: 8px 24px; transition: 0.3s; cursor: pointer; font-size: 14px; }
+        .filter-pill.active { background: var(--luxury-dark); color: white; }
+        .marriage-card { background: white; border-radius: 25px; overflow: hidden; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.05); cursor: pointer; position: relative; }
+        .marriage-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card-img-container { height: 250px; overflow: hidden; }
+        .card-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .wishlist-btn { position: absolute; top: 15px; right: 15px; background: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; z-index: 10; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wishlist-btn.active { color: #e74c3c; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .thumb-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .thumb-img:hover { border-color: var(--brand-gold); }
+        .payment-option { border: 2px solid #eee; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .payment-option.selected { border-color: var(--brand-gold); background: #fdf9f0; }
+        #compare-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--luxury-dark); color: white; padding: 12px 35px; border-radius: 100px; display: none; z-index: 1000; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        /* Increased height for more visual impact */
+.hero-slide-content {
+    height: 60vh; /* Increased from 40vh to 60vh */
+    width: 100vw;  /* Forces full viewport width */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+/* Ensure the carousel container itself is full width */
+#heritageCarousel {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Smoother fade transition for a luxury feel */
+.carousel-fade .carousel-item {
+    transition: opacity 1.2s ease-in-out;
+}
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+    <div class="luxury-loader-container">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        
+        <div class="logo-content">
+            <i class="bi bi-stars"></i>
+            <div class="brand-name">Artisan</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="compare-bar">
+        <span id="compare-count">Selected: 0 items</span>
+        <button class="btn btn-warning btn-sm rounded-pill px-4 fw-bold" onclick="launchComparison()">Compare Now</button>
+        <button class="btn btn-sm text-white-50" onclick="clearComparison()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <nav class="p-3 bg-white sticky-top shadow-sm d-flex justify-content-between align-items-center px-lg-5">
+        <a href="#" onclick="showMain()" class="text-dark text-decoration-none fw-600 d-flex align-items-center gap-2">
+            <i class="bi bi-stars text-warning"></i> <span>The Artisan Store</span>
+        </a>
+        <h4 class="m-0 text-uppercase tracking-widest fw-bold d-none d-md-block" style="font-size: 11px; letter-spacing: 2px;">Luxury Marriage Edition</h4>
+        <div class="d-flex gap-3 align-items-center">
+            <button onclick="showPage('my-bookings-page')" class="btn btn-sm btn-outline-dark rounded-pill">My Bookings</button>
+            <div class="position-relative">
+                <i class="bi bi-heart-fill text-muted fs-5"></i>
+                <span id="wishCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 9px;">0</span>
+            </div>
+            <a href="staff-portal.html" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
+        </div>
+    </nav>
+
+    <div id="main-content" class="page-section active">
+        <header id="heritageCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heritageCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#heritageCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heritageCarousel" data-bs-slide-to="2"></button>
+        <button type="button" data-bs-target="#heritageCarousel" data-bs-slide-to="3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+            <div class="hero-slide-content" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600');">
+                <div class="text-center text-white px-4">
+                    <h1 class="display-3 fw-bold mb-2">Heritage Weddings</h1>
+                    <p class="fs-4 opacity-90 font-light">Handcrafted setups for your most sacred moments</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+        <div class="hero-slide-content" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=1600');">
+            <div class="text-center text-white px-4">
+                <h1 class="display-3 fw-bold mb-2">Haldi Sunshine</h1>
+                <p class="fs-4 opacity-90 font-light">Vibrant marigold drapes for your joyful rituals</p>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-item" data-bs-interval="5000">
+        <div class="hero-slide-content" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600');">
+            <div class="text-center text-white px-4">
+                <h1 class="display-3 fw-bold mb-2">Grand Receptions</h1>
+                <p class="fs-4 opacity-90 font-light">Modern luxury stages with enchanting floral backdrops</p>
+            </div>
+        </div>
+    </div>
+
+        <div class="carousel-item" data-bs-interval="5000">
+            <div class="hero-slide-content" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1600');">
+                <div class="text-center text-white px-4">
+                    <h1 class="display-3 fw-bold mb-2">Royal Mandaps</h1>
+                    <p class="fs-4 opacity-90 font-light">Timeless elegance for traditional ceremonies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heritageCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heritageCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</header>
+
+        <div class="container" style="margin-top: -30px; position: relative; z-index: 100;">
+            <div class="bg-white p-2 rounded-pill shadow-xl d-flex gap-3 px-4 mx-auto max-w-2xl border">
+                <i class="bi bi-search py-3 text-muted"></i>
+                <input type="text" id="packageSearch" class="form-control border-0 focus:ring-0" placeholder="Search Mandap, Stage..." onkeyup="searchPackages()">
+            </div>
+        </div>
+
+        <section class="container py-5 mt-4">
+            <div class="flex justify-center gap-2 mb-10 flex-wrap">
+                <button class="filter-pill active" onclick="filterData('All', this)">All Collections</button>
+                <button class="filter-pill" onclick="filterData('Mandap', this)">Mandap</button>
+                <button class="filter-pill" onclick="filterData('Entry', this)">Grand Entry</button>
+                <button class="filter-pill" onclick="filterData('Haldi', this)">Haldi/Mehendi</button>
+                <button class="filter-pill" onclick="filterData('Stage', this)">Reception Stage</button>
+            </div>
+            <div class="row g-4" id="marriage-grid"></div>
+        </section>
+    </div>
+
+    <section id="product-detail-section" class="page-section container py-5">
+        <button class="btn btn-link text-dark text-decoration-none mb-4 p-0" onclick="showMain()">
+            <i class="bi bi-arrow-left me-2"></i> Back to Collections
+        </button>
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <img id="main-detail-img" src="" class="img-fluid rounded-4 mb-3 w-100 shadow-sm" style="height: 500px; object-fit: cover;">
+                <div class="d-flex gap-3 overflow-auto pb-2" id="image-thumbnails"></div>
+            </div>
+            <div class="col-lg-5">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span id="detail-cat" class="text-uppercase tracking-widest text-muted small fw-bold"></span>
+                        <h1 id="detail-title" class="display-5 fw-bold my-2"></h1>
+                        <div class="text-warning mb-3"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i> <span class="text-muted ms-2">(4.8/5)</span></div>
+                    </div>
+                    <button class="btn btn-outline-danger border-0 fs-4" onclick="toggleWishDetail()"><i id="detail-wish-icon" class="bi bi-heart"></i></button>
+                </div>
+                <div id="detail-price" class="fs-2 fw-bold text-dark mb-4"></div>
+                <p id="detail-desc" class="lead text-muted mb-5"></p>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-dark py-3 rounded-pill fw-bold" onclick="showPage('booking-form-page')">Book This Setup (40% Advance)</button>
+                    <button class="btn btn-success py-3 rounded-pill fw-bold" onclick="shareWhatsApp()"><i class="bi bi-whatsapp me-2"></i> Share via WhatsApp</button>
+                </div>
+                <div class="mt-5 p-4 bg-white rounded-4 border">
+                    <h5 class="fw-bold mb-3 small tracking-widest uppercase">Premium Inclusions</h5>
+                    <div class="row g-3" id="package-inclusions-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-5 border-top">
+            <h3 class="display-6 mb-4">Similar Enchanting Setups</h3>
+            <div class="row g-4" id="similar-grid"></div>
+        </div>
+    </section>
+
+    <div id="booking-form-page" class="page-section container py-5">
+        <div class="max-w-2xl mx-auto bg-white p-5 rounded-4 shadow-sm border">
+            <h2 class="mb-4 fw-bold">Event Details</h2>
+            <div class="row g-3">
+                <div class="col-12"><label class="fw-bold small">Full Name</label><input type="text" id="cust-name" class="form-control p-3 rounded-pill"></div>
+                <div class="col-md-6"><label class="fw-bold small">Phone</label><input type="tel" id="cust-phone" class="form-control p-3 rounded-pill"></div>
+                <div class="col-md-6"><label class="fw-bold small">Event Date</label><input type="date" id="cust-date" class="form-control p-3 rounded-pill"></div>
+                <div class="col-12">
+                    <label class="fw-bold small">Venue Location Name</label>
+                    <textarea id="cust-loc" class="form-control p-3" rows="2" placeholder="Click GPS button to fetch address..."></textarea>
+                    <button class="btn btn-sm btn-outline-primary mt-2 rounded-pill" onclick="getPreciseAddress()"><i class="bi bi-geo-alt"></i> Fetch Accurate Address</button>
+                </div>
+                <button class="btn btn-dark w-100 py-3 mt-4 rounded-pill fw-bold" onclick="proceedToCheckout()">Proceed to Advance Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkout-page" class="page-section container py-5">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-center mb-4 fw-bold">Payment Portal</h2>
+            <div class="card p-4 border-0 shadow-sm mb-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between mb-2"><span>Setup Total:</span><span id="chk-total" class="fw-bold"></span></div>
+                <div class="d-flex justify-content-between text-primary"><span>Required Payment:</span><span id="chk-advance" class="fw-bold"></span></div>
+            </div>
+            <div class="d-grid gap-3 mb-4">
+                <div class="payment-option d-flex align-items-center gap-3" onclick="selectPay(this, 'UPI')"><i class="bi bi-qr-code fs-4"></i> UPI / PhonePe / Scanner</div>
+                <div class="payment-option d-flex align-items-center gap-3" onclick="selectPay(this, 'Card')"><i class="bi bi-credit-card fs-4"></i> Debit/Credit Card</div>
+            </div>
+            <div id="qr-section" class="text-center mb-4" style="display:none">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ARTISAN_PAY" class="mx-auto border p-2 bg-white rounded">
+                <p class="mt-2 small text-muted">Scan QR to complete payment</p>
+            </div>
+            <button class="btn btn-success w-100 py-3 rounded-pill fw-bold" onclick="confirmPayment()">Pay & Confirm</button>
+        </div>
+    </div>
+
+    <div id="my-bookings-page" class="page-section container py-5">
+        <h2 class="display-6 mb-5 fw-bold">My Luxury Bookings</h2>
+        <div id="bookings-list" class="row g-4"></div>
+    </div>
+
+    <div class="modal fade" id="compareModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow-lg"><div class="modal-body p-5"><h2 class="text-center mb-4">Side-by-Side Comparison</h2><div class="table-responsive"><table class="table align-middle text-center"><thead id="compare-head" class="table-light"></thead><tbody id="compare-body"></tbody></table></div><div class="text-center mt-4"><button class="btn btn-dark px-5 rounded-pill" data-bs-dismiss="modal">Close</button></div></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const packages = [
+            { id: 1, cat: 'Mandap', title: 'The Royal Vedic Mandap', price: 85000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], desc: 'Handcrafted wooden carvings inspired by ancient temples.', features: ['Fresh Tuberose Flowers', 'Solid Teakwood Pillars', 'Vedic Fire-pit Setup'] },
+            { id: 2, cat: 'Haldi', title: 'Marigold Sunshine Decor', price: 25000, img: 'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800', gallery: ['https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800'], desc: 'A vibrant yellow paradise featuring marigold curtains.', features: ['Floral Swing', 'Eco-friendly Drapes', 'Brass Vessel Props'] },
+            { id: 3, cat: 'Entry', title: 'Imperial Floral Tunnel', price: 45000, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], desc: 'A stunning 40-foot tunnel of cascading wisteria.', features: ['Petal Rain Machine', 'Warm LED Spotlights'] },
+            { id: 4, cat: 'Mandap', title: 'White Serenity Crystal', price: 110000, img: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800', gallery: ['https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800'], desc: 'A modern masterpiece using glass pillars.', features: ['Crystal Chandeliers', 'Imported White Lilies'] },
+            { id: 5, cat: 'Stage', title: 'Velvet Rose Reception', price: 65000, img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', gallery: ['https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800'], desc: 'A grand reception stage with velvet backdrops.', features: ['Velvet Wall Panels', 'Grand Sofa Set'] },
+            { id: 6, cat: 'Haldi', title: 'Pink Lotus Mehendi', price: 32000, img: 'https://images.unsplash.com/photo-1561565507-67702816913e?w=800', gallery: ['https://images.unsplash.com/photo-1561565507-67702816913e?w=800'], desc: 'Pink lotus-themed decor with Rajasthani umbrellas.', features: ['Lotus Cutouts', 'Gadda Seating'] },
+            { id: 7, cat: 'Entry', title: 'Vintage Carriage Arrival', price: 55000, img: 'https://images.unsplash.com/photo-1532706302136-347333066023?w=800', gallery: ['https://images.unsplash.com/photo-1532706302136-347333066023?w=800'], desc: 'A fully decorated vintage carriage for royal entry.', features: ['Decorated Carriage', 'Dhol Players'] },
+            { id: 8, cat: 'Stage', title: 'Moonlight Garden Stage', price: 95000, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], desc: 'A lush garden-themed stage with thousands of lights.', features: ['Hanging Wisteria', 'Fog Fountain'] },
+            { id: 9, cat: 'Mandap', title: 'Golden Temple Heritage', price: 150000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800'], desc: 'A gold-plated structure featuring temple carvings.', features: ['Gold Leaf Accents', 'Zardosi Drapes'] },
+            { id: 10, cat: 'Haldi', title: 'Tropical Zest Haldi', price: 38000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], desc: 'Exotic tropical leaves mixed with bright sunflowers.', features: ['Real Monstera Leaves', 'Bamboo Seating'] },
+            { id: 11, cat: 'Entry', title: 'Sufi Whirling Entry', price: 42000, img: 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800', gallery: ['https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800'], desc: 'A pathway lined with Moroccan lanterns.', features: ['Moroccan Lanterns', 'Live Rabab Player'] },
+            { id: 12, cat: 'Stage', title: 'The Floating Cloud Stage', price: 125000, img: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', gallery: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], desc: 'A high-concept stage using dry ice.', features: ['Dry Ice Fog', 'Fiber Optic Backdrop'] },
+            { id: 13, cat: 'Mandap', title: 'Rustic Forest Mandap', price: 72000, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], desc: 'Made from natural birch wood and forest vines.', features: ['Natural Wood Logs', 'Eco Seating'] },
+            { id: 14, cat: 'Entry', title: 'Mirror Mirage Walkway', price: 88000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800'], desc: 'A full-length mirror aisle that reflects the sky.', features: ['Mirror Floor', 'Glass Guardrails'] },
+            { id: 15, cat: 'Haldi', title: 'Indigo & Marigold Fusion', price: 29000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800'], desc: 'Contrast of deep blue pottery and marigolds.', features: ['Blue Pottery Vases', 'Clay Pot Decor'] },
+            { id: 16, cat: 'Stage', title: 'Bollywood Gala Stage', price: 180000, img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800', gallery: ['https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'], desc: '60-foot stage with integrated LED screens.', features: ['P3 LED Wall', 'Moving Heads'] },
+            { id: 17, cat: 'Mandap', title: 'The Lotus Pond Mandap', price: 210000, img: 'https://images.unsplash.com/photo-1549416878-b9ca35c2d47b?w=800', gallery: ['https://images.unsplash.com/photo-1549416878-b9ca35c2d47b?w=800'], desc: 'A mandap built in the center of a water body.', features: ['Artificial Pond', 'Submerged LED'] },
+            { id: 18, cat: 'Entry', title: 'Neon Heritage Entry', price: 55000, img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800', gallery: ['https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800'], desc: 'Traditional Rajasthani jaali work backlit with neon.', features: ['CNC Wood Panels', 'Neon Signage'] },
+            { id: 19, cat: 'Stage', title: 'The Pearl Palace', price: 145000, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], desc: 'Ivory-themed stage featuring pearl curtains.', features: ['Pearl Strings', 'Silver Furniture'] },
+            { id: 20, cat: 'Haldi', title: 'Sunshine Umbrella Park', price: 22000, img: 'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800', gallery: ['https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800'], desc: 'Featuring hundreds of hanging paper umbrellas.', features: ['Umbrella Ceiling', 'Pop-art Signage'] },
+            { id: 21, cat: 'Mandap', title: 'Infinite Mirror Mandap', price: 165000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800'], desc: 'Using mirrors and LED strips for infinite effect.', features: ['One-way Mirror', 'Smoke machine'] },
+            { id: 22, cat: 'Entry', title: 'Whimsical Butterfly Path', price: 68000, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], desc: 'Mechanical butterflies that flutter wings.', features: ['Kinetic Butterfly', 'Lavender Fragrance'] },
+            { id: 23, cat: 'Stage', title: 'Vintage Library Stage', price: 78000, img: 'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?w=800', gallery: ['https://images.unsplash.com/photo-1491841573634-28140fc7ced7?w=800'], desc: 'Designed like a classical Victorian library.', features: ['Faux Book Walls', 'Brass Lamps'] }
+        ];
+
+        let wishlist = JSON.parse(localStorage.getItem('wed_wish')) || [];
+        let allBookings = JSON.parse(localStorage.getItem('my_orders')) || [];
+        let selectedForCompare = [];
+        let currentProduct = null;
+        let selectedPayMethod = '';
+        let bookingStage = 'advance';
+
+        function showPage(id) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'my-bookings-page') renderMyBookings();
+            window.scrollTo(0,0);
+        }
+
+        function showMain() { showPage('main-content'); renderGrid(packages); }
+
+        function renderGrid(items, gridId = 'marriage-grid') {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = items.map(p => `
+                <div class="col-md-6 col-lg-3">
+                    <div class="marriage-card h-100" onclick="showDetails(${p.id})">
+                        <label class="position-absolute top-3 left-3 bg-white px-2 py-1 rounded-pill small shadow-sm" onclick="event.stopPropagation()">
+                            <input type="checkbox" onchange="toggleCompare(${p.id})" ${selectedForCompare.includes(p.id)?'checked':''}> Compare
+                        </label>
+                        <div class="wishlist-btn ${wishlist.includes(p.id)?'active':''}" onclick="event.stopPropagation(); toggleWish(${p.id})"><i class="bi bi-heart-fill"></i></div>
+                        <div class="card-img-container"><img src="${p.img}"></div>
+                        <div class="p-4">
+                            <small class="text-muted fw-bold uppercase">${p.cat}</small>
+                            <h5 class="fw-bold my-1 text-truncate">${p.title}</h5>
+                            <p class="text-gold fw-bold mb-0">₹${p.price.toLocaleString()}</p>
+                            <button class="btn btn-dark w-100 btn-sm mt-3 rounded-pill">View & Book</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function showDetails(id) {
+            currentProduct = packages.find(p => p.id === id);
+            document.getElementById('detail-cat').innerText = currentProduct.cat;
+            document.getElementById('detail-title').innerText = currentProduct.title;
+            document.getElementById('detail-price').innerText = `₹${currentProduct.price.toLocaleString()}`;
+            document.getElementById('detail-desc').innerText = currentProduct.desc;
+            document.getElementById('main-detail-img').src = currentProduct.img;
+            document.getElementById('image-thumbnails').innerHTML = currentProduct.gallery.map(img => `<img src="${img}" class="thumb-img" onclick="document.getElementById('main-detail-img').src='${img}'">`).join('');
+            document.getElementById('package-inclusions-list').innerHTML = currentProduct.features.map(f => `<div class="col-6"><i class="bi bi-patch-check-fill text-warning me-2"></i> ${f}</div>`).join('');
+            updateDetailWishUI();
+            
+            const similar = packages.filter(p => p.cat === currentProduct.cat && p.id !== currentProduct.id).slice(0, 4);
+            renderGrid(similar, 'similar-grid');
+            showPage('product-detail-section');
+        }
+
+        async function getPreciseAddress() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        document.getElementById('cust-loc').value = data.display_name;
+                    } catch (e) {
+                        document.getElementById('cust-loc').value = `Latitude: ${lat}, Longitude: ${lon}`;
+                    }
+                });
+            }
+        }
+
+        function proceedToCheckout() {
+            const name = document.getElementById('cust-name').value;
+            if(!name) return alert("Please fill the details first.");
+            bookingStage = 'advance';
+            document.getElementById('chk-total').innerText = `₹${currentProduct.price.toLocaleString()}`;
+            document.getElementById('chk-advance').innerText = `40% Advance: ₹${(currentProduct.price * 0.4).toLocaleString()}`;
+            showPage('checkout-page');
+        }
+
+        function selectPay(el, method) {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPayMethod = method;
+            document.getElementById('qr-section').style.display = 'block';
+        }
+
+        function confirmPayment() {
+            if(!selectedPayMethod) return alert("Select payment method");
+            
+            if(bookingStage === 'advance') {
+                const orderId = "ORD" + Math.floor(Math.random()*900000 + 100000);
+                const order = { 
+                    ...currentProduct, 
+                    orderId, 
+                    status: '40% Paid - Decoration Pending', 
+                    isCompleted: false, 
+                    user: { 
+                        name: document.getElementById('cust-name').value, 
+                        date: document.getElementById('cust-date').value, 
+                        loc: document.getElementById('cust-loc').value 
+                    }, 
+                    timestamp: new Date().toLocaleString() 
+                };
+                allBookings.push(order);
+                localStorage.setItem('my_orders', JSON.stringify(allBookings));
+                alert("Payment Success! Order ID: " + orderId);
+            } else {
+                const idx = allBookings.findIndex(o => o.orderId === targetOrderID);
+                allBookings[idx].status = 'Fully Paid - Booking Completed';
+                allBookings[idx].isCompleted = true;
+                localStorage.setItem('my_orders', JSON.stringify(allBookings));
+                alert("Final Payment Success!");
+            }
+            showPage('my-bookings-page');
+        }
+
+        function renderMyBookings() {
+            const container = document.getElementById('bookings-list');
+            if(allBookings.length === 0) { 
+                container.innerHTML = "<div class='col-12 text-center'><p>No bookings found.</p><button class='btn btn-dark rounded-pill' onclick='showMain()'>Explore Designs</button></div>"; 
+                return; 
+            }
+            container.innerHTML = allBookings.map(o => `
+                <div class="col-12">
+                    <div class="card p-4 shadow-sm border-0 bg-white rounded-4 mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2"><img src="${o.img}" class="rounded-4 w-100" style="height:100px; object-fit:cover;"></div>
+                            <div class="col-md-5">
+                                <h5 class="fw-bold mb-1">${o.title}</h5>
+                                <p class="small text-muted mb-0">Order ID: ${o.orderId} | Status: <span class="badge bg-warning text-dark">${o.status}</span></p>
+                                <p class="small text-muted mb-0">Event Date: ${o.user.date}</p>
+                            </div>
+                            <div class="col-md-5 text-end">
+                                ${o.status.includes('Decor Completed') ? `<button class="btn btn-primary btn-sm me-2 rounded-pill px-3" onclick="startFinalPayment('${o.orderId}')">Pay Balance 60%</button>` : ''}
+                                <button class="btn btn-outline-danger btn-sm me-2 rounded-pill px-3" onclick="cancelBooking('${o.orderId}')">Cancel</button>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3" onclick="downloadInvoice('${o.orderId}')">Invoice</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function startFinalPayment(id) {
+            bookingStage = 'balance';
+            targetOrderID = id;
+            const order = allBookings.find(o => o.orderId === id);
+            document.getElementById('chk-total').innerText = `₹${order.price.toLocaleString()}`;
+            document.getElementById('chk-advance').innerText = `60% Balance: ₹${(order.price * 0.6).toLocaleString()}`;
+            showPage('checkout-page');
+        }
+
+        function cancelBooking(id) {
+            if(confirm("Cancel this booking? Your advance will be refunded to your source account within 24 hours.")) {
+                allBookings = allBookings.filter(o => o.orderId !== id);
+                localStorage.setItem('my_orders', JSON.stringify(allBookings));
+                renderMyBookings();
+                alert("Booking Cancelled. Refund initiated.");
+            }
+        }
+
+        function toggleCompare(id) {
+            if(selectedForCompare.includes(id)) {
+                selectedForCompare = selectedForCompare.filter(i => i !== id);
+            } else {
+                if(selectedForCompare.length >= 2) {
+                    alert("You can compare only 2 items at a time.");
+                    renderGrid(packages); // Reset checkboxes
+                    return;
+                }
+                selectedForCompare.push(id);
+            }
+            const bar = document.getElementById('compare-bar');
+            bar.style.display = selectedForCompare.length > 0 ? 'flex' : 'none';
+            document.getElementById('compare-count').innerText = `Selected: ${selectedForCompare.length}/2`;
+        }
+
+        function launchComparison() {
+            if(selectedForCompare.length < 2) return alert("Please select 2 setups to compare.");
+            const p1 = packages.find(p => p.id === selectedForCompare[0]);
+            const p2 = packages.find(p => p.id === selectedForCompare[1]);
+            
+            document.getElementById('compare-head').innerHTML = `<tr><th class="p-3">Features</th><th class="p-3">${p1.title}</th><th class="p-3">${p2.title}</th></tr>`;
+            document.getElementById('compare-body').innerHTML = `
+                <tr><td class="fw-bold">Preview</td><td><img src="${p1.img}" class="rounded shadow-sm" style="height:100px;"></td><td><img src="${p2.img}" class="rounded shadow-sm" style="height:100px;"></td></tr>
+                <tr><td class="fw-bold">Price</td><td class="text-gold fw-bold">₹${p1.price.toLocaleString()}</td><td class="text-gold fw-bold">₹${p2.price.toLocaleString()}</td></tr>
+                <tr><td class="fw-bold">Category</td><td>${p1.cat}</td><td>${p2.cat}</td></tr>
+                <tr><td class="fw-bold">Inclusions</td><td class="small">${p1.features.join('<br>')}</td><td class="small">${p2.features.join('<br>')}</td></tr>
+            `;
+            const compModal = new bootstrap.Modal(document.getElementById('compareModal'));
+            compModal.show();
+        }
+
+        function clearComparison() { 
+            selectedForCompare = []; 
+            document.getElementById('compare-bar').style.display = 'none';
+            renderGrid(packages); 
+        }
+
+        function toggleWish(id) {
+            wishlist.includes(id) ? wishlist = wishlist.filter(i => i !== id) : wishlist.push(id);
+            localStorage.setItem('wed_wish', JSON.stringify(wishlist));
+            document.getElementById('wishCount').innerText = wishlist.length;
+            renderGrid(packages);
+        }
+
+        function updateDetailWishUI() {
+            const icon = document.getElementById('detail-wish-icon');
+            icon.className = wishlist.includes(currentProduct.id) ? 'bi bi-heart-fill text-danger' : 'bi bi-heart';
+        }
+
+        function toggleWishDetail() { toggleWish(currentProduct.id); updateDetailWishUI(); }
+
+        function downloadInvoice(id) {
+            const o = allBookings.find(i => i.orderId === id);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(22); doc.text("THE ARTISAN STORE", 105, 20, null, null, "center");
+            doc.setFontSize(12); doc.text("Luxury Marriage Edition - Official Invoice", 105, 30, null, null, "center");
+            doc.line(20, 35, 190, 35);
+            doc.text(`Order ID: ${o.orderId}`, 20, 50);
+            doc.text(`Customer: ${o.user.name}`, 20, 60);
+            doc.text(`Setup: ${o.title}`, 20, 70);
+            doc.text(`Venue: ${o.user.loc}`, 20, 80);
+            doc.text(`Total Price: INR ${o.price.toLocaleString()}`, 20, 90);
+            doc.text(`Status: ${o.status}`, 20, 100);
+            doc.save(`Invoice_${o.orderId}.pdf`);
+        }
+
+        function filterData(cat, btn) {
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGrid(cat === 'All' ? packages : packages.filter(p => p.cat === cat));
+        }
+
+        function searchPackages() {
+            const q = document.getElementById('packageSearch').value.toLowerCase();
+            renderGrid(packages.filter(p => p.title.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)));
+        }
+
+        window.onload = () => { 
+    renderGrid(packages); 
+    document.getElementById('wishCount').innerText = wishlist.length;
+
+    const loader = document.getElementById('loader');
+    
+    // Give the animation 2.5 seconds to shine
+    setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.transform = 'scale(1.5)'; // Elegant zoom out effect
+        
+        // Completely remove from view after transition
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 1200); //Reduction 1: Time for the fade-out animation to finish
+    }, 700); // Reduction 2: Total time the loader is visible
+};
+</script>
+</body>
+</html>
