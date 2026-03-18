@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagement Luxury Collections | The Artisan Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { --brand-gold: #b89c6d; --brand-gold-dark: #8e6f3e; --luxury-dark: #1a1a1a; --parchment: #fdfbf8; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--parchment); color: #333; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        #loader {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; transition: opacity 0.8s, transform 1.2s;
+        }
+        .ring {
+            position: absolute; border: 2px solid var(--brand-gold); border-radius: 50%;
+            opacity: 0; animation: ring-pulse 3s infinite;
+        }
+        .ring:nth-child(1) { animation-delay: 0s; }
+        .ring:nth-child(2) { animation-delay: 1s; }
+        @keyframes ring-pulse {
+            0% { width: 50px; height: 50px; opacity: 0; transform: scale(0.5); }
+            30% { opacity: 0.5; }
+            100% { width: 400px; height: 400px; opacity: 0; transform: scale(1.2); border-width: 1px; }
+        }
+        .brand-name-loader {
+            font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+            letter-spacing: 10px; text-transform: uppercase; margin-top: 20px;
+            background: linear-gradient(to right, #ffffff 20%, #b89c6d 50%, #ffffff 80%);
+            background-size: 200% auto; background-clip: text; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; animation: shine-text 3s linear infinite;
+        }
+        @keyframes shine-text { to { background-position: 200% center; } }
+
+        .engagement-card { background: white; border-radius: 25px; overflow: hidden; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.05); cursor: pointer; position: relative; }
+        .engagement-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card-img-container { height: 280px; overflow: hidden; }
+        .card-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        
+        .filter-pill { border: 1px solid #ddd; background: white; color: #666; border-radius: 50px; padding: 8px 24px; transition: 0.3s; cursor: pointer; font-size: 14px; }
+        .filter-pill.active { background: var(--luxury-dark); color: white; }
+        
+        .wishlist-btn { position: absolute; top: 15px; right: 15px; background: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; z-index: 10; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wishlist-btn.active { color: #e74c3c; }
+
+        .hero-section { height: 55vh; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.5s ease; }
+
+        .payment-option { border: 2px solid #eee; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .payment-option.selected { border-color: var(--brand-gold); background: #fdf9f0; }
+
+        #compare-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--luxury-dark); color: white; padding: 12px 35px; border-radius: 100px; display: none; z-index: 1000; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="text-center">
+            <div class="ring"></div><div class="ring"></div>
+            <i class="bi bi-diamond text-warning fs-1"></i>
+            <div class="brand-name-loader">Engagement</div>
+        </div>
+    </div>
+
+    <nav class="p-3 bg-white sticky-top shadow-sm d-flex justify-content-between align-items-center px-lg-5">
+        <div class="d-flex align-items-center gap-4">
+            <a href="index.html" class="text-dark text-decoration-none fw-bold d-flex align-items-center gap-2">
+                <i class="bi bi-stars text-warning"></i> <span>The Artisan Store</span>
+            </a>
+            <div class="d-none d-md-flex gap-3 mt-1">
+                <a href="marriage.html" class="text-muted small text-decoration-none uppercase tracking-widest">Marriage</a>
+                <a href="Engagement.html" class="text-dark fw-bold small text-decoration-none uppercase border-bottom border-warning tracking-widest">Engagement</a>
+            </div>
+        </div>
+        <div class="d-flex gap-3 align-items-center">
+            <button onclick="showPage('my-bookings-page')" class="btn btn-sm btn-outline-dark rounded-pill">My Bookings</button>
+            <div class="position-relative">
+                <i class="bi bi-heart-fill text-muted fs-5"></i>
+                <span id="wishCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 9px;">0</span>
+            </div>
+            <a href="staff-portal.html" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
+        </div>
+    </nav>
+
+    <div id="compare-bar">
+        <span id="compare-count">Selected: 0 items</span>
+        <button class="btn btn-warning btn-sm rounded-pill px-4 fw-bold" onclick="launchComparison()">Compare Now</button>
+        <button class="btn btn-sm text-white-50" onclick="clearComparison()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div id="main-content" class="page-section active">
+        <header class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1600');">
+            <div>
+                <h1 class="display-3 fw-bold">The Ring Ceremony</h1>
+                <p class="fs-4 font-light">Intimate & Modern setups for your special beginning</p>
+            </div>
+        </header>
+
+        <div class="container" style="margin-top: -30px; position: relative; z-index: 100;">
+            <div class="bg-white p-2 rounded-pill shadow-xl d-flex gap-3 px-4 mx-auto max-w-2xl border">
+                <i class="bi bi-search py-3 text-muted"></i>
+                <input type="text" id="engagementSearch" class="form-control border-0 focus:ring-0" placeholder="Search Backdrops, Lighting, Boho..." onkeyup="searchEngagements()">
+            </div>
+        </div>
+
+        <section class="container py-5 mt-4">
+            <div class="flex justify-center gap-2 mb-10 flex-wrap">
+                <button class="filter-pill active" onclick="filterData('All', this)">All Designs</button>
+                <button class="filter-pill" onclick="filterData('Backdrop', this)">Thematic Backdrops</button>
+                <button class="filter-pill" onclick="filterData('Lighting', this)">Neon & Fairy</button>
+                <button class="filter-pill" onclick="filterData('Seating', this)">Royal Seating</button>
+            </div>
+            <div class="row g-4" id="engagement-grid"></div>
+        </section>
+    </div>
+
+    <section id="product-detail-section" class="page-section container py-5">
+        <button class="btn btn-link text-dark text-decoration-none mb-4 p-0" onclick="showMain()">
+            <i class="bi bi-arrow-left me-2"></i> Back to Collections
+        </button>
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <img id="detail-img" src="" class="img-fluid rounded-4 shadow-sm w-100 mb-3" style="height: 500px; object-fit: cover;">
+                
+                <div class="d-flex gap-3 overflow-auto pb-2" id="image-thumbnails"></div>
+            </div>
+            <div class="col-lg-5">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <span id="detail-cat" class="text-uppercase text-muted small fw-bold tracking-widest"></span>
+                        <h1 id="detail-title" class="display-5 fw-bold my-2"></h1>
+                        <div class="text-warning mb-3" id="detail-stars"></div>
+                    </div>
+                    <button class="btn btn-outline-danger border-0 fs-4" onclick="toggleWishDetail()"><i id="detail-wish-icon" class="bi bi-heart"></i></button>
+                </div>
+                <div id="detail-price" class="fs-2 fw-bold text-dark mb-4"></div>
+                <p id="detail-desc" class="lead text-muted mb-5"></p>
+                <div class="d-grid gap-3">
+                    <button class="btn btn-dark py-3 rounded-pill fw-bold" onclick="showPage('booking-form-page')">Book This Setup (40% Advance)</button>
+                    <button class="btn btn-success py-3 rounded-pill fw-bold" onclick="shareWhatsApp()"><i class="bi bi-whatsapp me-2"></i> Share via WhatsApp</button>
+                </div>
+                <div class="mt-5 p-4 bg-white rounded-4 border">
+                    <h5 class="fw-bold mb-3 small tracking-widest uppercase">Premium Inclusions</h5>
+                    <div class="row g-3" id="package-inclusions-list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 pt-5 border-top">
+            <h3 class="display-6 mb-4">Similar Enchanting Setups</h3>
+            <div class="row g-4" id="similar-grid"></div>
+        </div>
+    </section>
+
+    <div id="booking-form-page" class="page-section container py-5">
+        <div class="max-w-2xl mx-auto bg-white p-5 rounded-4 shadow-sm border">
+            <h2 class="mb-4 fw-bold">Booking Details</h2>
+            <div class="row g-3">
+                <div class="col-12"><label class="fw-bold small">Full Name</label><input type="text" id="cust-name" class="form-control p-3 rounded-pill"></div>
+                <div class="col-md-6"><label class="fw-bold small">Phone</label><input type="tel" id="cust-phone" class="form-control p-3 rounded-pill"></div>
+                <div class="col-md-6"><label class="fw-bold small">Engagement Date</label><input type="date" id="cust-date" class="form-control p-3 rounded-pill"></div>
+                <div class="col-12">
+                    <label class="fw-bold small">Venue Location</label>
+                    <textarea id="cust-loc" class="form-control p-3" rows="2" placeholder="Venue Address..."></textarea>
+                    <button class="btn btn-sm btn-outline-primary mt-2 rounded-pill" onclick="getPreciseAddress()"><i class="bi bi-geo-alt"></i> Fetch Address</button>
+                </div>
+                <button class="btn btn-dark w-100 py-3 mt-4 rounded-pill fw-bold" onclick="proceedToCheckout()">Proceed to Advance Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkout-page" class="page-section container py-5">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-center mb-4 fw-bold">Payment Portal</h2>
+            <div class="card p-4 border-0 shadow-sm mb-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between mb-2"><span>Setup Total:</span><span id="chk-total" class="fw-bold"></span></div>
+                <div class="d-flex justify-content-between text-primary"><span id="chk-label">Advance Payment:</span><span id="chk-advance" class="fw-bold"></span></div>
+            </div>
+            <div class="d-grid gap-3 mb-4">
+                <div class="payment-option d-flex align-items-center gap-3" onclick="selectPay(this, 'UPI')"><i class="bi bi-qr-code fs-4"></i> UPI / PhonePe</div>
+                <div class="payment-option d-flex align-items-center gap-3" onclick="selectPay(this, 'Card')"><i class="bi bi-credit-card fs-4"></i> Debit/Credit Card</div>
+            </div>
+            <div id="qr-section" class="text-center mb-4" style="display:none">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ARTISAN_PAY" class="mx-auto border p-2 bg-white rounded">
+                <p class="mt-2 small text-muted">Scan QR to pay</p>
+            </div>
+            <button class="btn btn-success w-100 py-3 rounded-pill fw-bold" onclick="confirmPayment()">Pay & Confirm</button>
+        </div>
+    </div>
+
+    <div id="my-bookings-page" class="page-section container py-5">
+        <h2 class="display-6 mb-5 fw-bold">My Luxury Bookings</h2>
+        <div id="bookings-list" class="row g-4"></div>
+    </div>
+
+    <div class="modal fade" id="compareModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow-lg"><div class="modal-body p-5"><h2 class="text-center mb-4">Side-by-Side Comparison</h2><div class="table-responsive"><table class="table align-middle text-center"><thead id="compare-head" class="table-light"></thead><tbody id="compare-body"></tbody></table></div><div class="text-center mt-4"><button class="btn btn-dark px-5 rounded-pill" data-bs-dismiss="modal">Close</button></div></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const engagementPackages = [
+            
+    // Existing 1-30 mixed with new items...
+    { id: 101, cat: 'Backdrop', title: 'Boho Chic Floral Circle', price: 15000, img: 'https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800', gallery: ['https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], rating: 4.8, reviews: 124, desc: 'A minimalist circular pampas grass and rose backdrop.', features: ['Pampas Grass', 'Silk Roses', 'Circular Frame'] },
+    { id: 102, cat: 'Lighting', title: 'Ever After Neon Glow', price: 12000, img: 'https://images.unsplash.com/photo-1561565507-67702816913e?w=800', gallery: ['https://images.unsplash.com/photo-1561565507-67702816913e?w=800', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'], rating: 4.9, reviews: 89, desc: 'Customizable neon signs with fairy light curtains.', features: ['Custom Neon Text', 'Warm White LEDs'] },
+    { id: 103, cat: 'Seating', title: 'Victorian Love Seat', price: 8000, img: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', gallery: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', 'https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800'], rating: 4.7, reviews: 56, desc: 'Tufted velvet sofa in emerald with gold accents.', features: ['Velvet Fabric', 'Gold Legs'] },
+    { id: 104, cat: 'Backdrop', title: 'Rustic Wood & Vines', price: 18000, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800'], rating: 4.5, reviews: 42, desc: 'Weathered wood panels draped in fresh jasmine vines.', features: ['Real Wood', 'Artificial Vines'] },
+    { id: 105, cat: 'Lighting', title: 'Enchanted Forest Fairy', price: 22000, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800'], rating: 5.0, reviews: 210, desc: 'Thousands of micro-LEDs creating a canopy.', features: ['Micro LEDs', 'Hanging Orbs'] },
+    { id: 106, cat: 'Seating', title: 'The Royal Maharaja Platter', price: 25000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800'], rating: 4.6, reviews: 78, desc: 'Traditional floor seating with silk cushions.', features: ['Silk Cushions', 'Low-profile Table'] },
+    { id: 107, cat: 'Backdrop', title: 'Geometric Rose Gold', price: 14000, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800'], rating: 4.8, reviews: 95, desc: 'Modern hexagonal metal structure with corner florals.', features: ['Rose Gold Metal', 'Exotic Lilies'] },
+    { id: 108, cat: 'Lighting', title: 'Starlight Tunnel Entry', price: 30000, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.9, reviews: 156, desc: 'A tunnel composed of hanging lights.', features: ['Dimmable LEDs', 'Motion Sensors'] },
+    { id: 109, cat: 'Seating', title: 'Ethereal Cloud Swing', price: 12000, img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', gallery: ['https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.7, reviews: 64, desc: 'Floral decorated swing for the couple.', features: ['Floral Garland', 'Dry Ice Fog'] },
+    { id: 110, cat: 'Backdrop', title: 'Shimmering Sequin Wall', price: 11000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.4, reviews: 82, desc: 'Interactive gold sequins that react to air movement.', features: ['Wind-Active Panels', 'Gold Gloss'] },
+    { id: 111, cat: 'Backdrop', title: 'Velvet Royal Arch', price: 19500, img: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800', gallery: ['https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800', 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800'], rating: 4.6, reviews: 112, desc: 'Deep maroon velvet arch with crystal chandelier.', features: ['Premium Velvet', 'Real Crystal'] },
+    { id: 112, cat: 'Lighting', title: 'Moroccan Lantern Path', price: 9000, img: 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800', gallery: ['https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.5, reviews: 48, desc: 'Handcrafted Moroccan brass lanterns walkway.', features: ['Antique Brass', 'Pattern Projection'] },
+    { id: 113, cat: 'Seating', title: 'Modern Ghost Chair Set', price: 7500, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800'], rating: 4.2, reviews: 31, desc: 'Transparent acrylic chairs with white cushions.', features: ['Acrylic Body', 'Ergonomic'] },
+    { id: 114, cat: 'Backdrop', title: 'Garden of Eden Wall', price: 28000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1476136230993-88a944328229?w=800'], rating: 5.0, reviews: 189, desc: 'Full living wall with moss, ferns, and hydrangeas.', features: ['Living Moss', 'Fresh Water Mist'] },
+    { id: 115, cat: 'Lighting', title: 'Vintage Edison Glow', price: 13500, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.7, reviews: 76, desc: 'Exposed filament bulbs on wooden beams.', features: ['Edison Bulbs', 'Timber Beams'] },
+    { id: 116, cat: 'Backdrop', title: 'Origami Paper Crane Wall', price: 16000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], rating: 4.8, reviews: 54, desc: 'Artistic wall featuring 1000 handmade paper cranes.', features: ['Custom Paper Art', 'Hidden Spotlights'] },
+    { id: 117, cat: 'Seating', title: 'Boho Floor Lounge', price: 21000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.6, reviews: 93, desc: 'Low-table setup with Persian rugs and macrame.', features: ['Persian Rugs', 'Macrame Tassels'] },
+    { id: 118, cat: 'Lighting', title: 'Floating Candle Pond', price: 24000, img: 'https://images.unsplash.com/photo-1549416878-b9ca35c2d47b?w=800', gallery: ['https://images.unsplash.com/photo-1549416878-b9ca35c2d47b?w=800', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800'], rating: 4.9, reviews: 142, desc: 'Pond setup with 500 floating glass candles.', features: ['Safety Glass', 'Long-burn Wax'] },
+    { id: 119, cat: 'Backdrop', title: 'Tropical Paradise', price: 17000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800'], rating: 4.5, reviews: 67, desc: 'Palm leaves, monsteras, and neon signs.', features: ['Real Foliage', 'UV Lighting'] },
+    { id: 120, cat: 'Backdrop', title: 'Art Deco Mirror Arch', price: 32000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800'], rating: 4.9, reviews: 88, desc: 'Gold-framed mirror panels that create infinite loops.', features: ['Safety Mirror', 'Beveled Edges'] },
+    { id: 121, cat: 'Lighting', title: 'Fiber Optic Starry Night', price: 27000, img: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', gallery: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800'], rating: 5.0, reviews: 115, desc: 'Velvet ceiling with fiber optic constellation.', features: ['Interactive Light', 'Custom Map'] },
+    { id: 122, cat: 'Seating', title: 'Regency Throne Chairs', price: 15000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.7, reviews: 59, desc: 'High-back carved chairs in gold leaf and silk.', features: ['Gold Leafing', 'Ivory Silk'] },
+    { id: 123, cat: 'Backdrop', title: 'Watercolor Canvas', price: 10500, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.3, reviews: 41, desc: 'Hand-painted abstract watercolor backdrop.', features: ['Artist-signed', 'Hidden Fan'] },
+    { id: 124, cat: 'Lighting', title: 'Crystal Rain Drops', price: 35000, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.9, reviews: 130, desc: 'Suspended crystals catching floor projectors.', features: ['Swarovski Cut', 'RGB Projectors'] },
+    { id: 125, cat: 'Seating', title: 'Tuscan Vineyard Bench', price: 9500, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.4, reviews: 37, desc: 'Weathered oak benches with lavender cushions.', features: ['Solid Oak', 'Scented Sachets'] },
+    { id: 126, cat: 'Backdrop', title: 'Marble & Gold Slate', price: 26000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.8, reviews: 72, desc: 'Faux Carrara marble wall with inlaid gold metal.', features: ['Stone Texture', 'Matte Finish'] },
+    { id: 127, cat: 'Lighting', title: 'Industrial Copper Cage', price: 11500, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.5, reviews: 29, desc: 'Copper geometric cages housing filament lamps.', features: ['Raw Copper', 'Pendent Style'] },
+    { id: 128, cat: 'Backdrop', title: 'Paper Flower Fantasy', price: 14500, img: 'https://images.unsplash.com/photo-1561565507-67702816913e?w=800', gallery: ['https://images.unsplash.com/photo-1561565507-67702816913e?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.6, reviews: 104, desc: 'Giant 3D paper flowers in pastel shades.', features: ['Hand-cut Paper', 'Scale Variety'] },
+    { id: 129, cat: 'Seating', title: 'Emerald Velvet Divan', price: 18000, img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', gallery: ['https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], rating: 4.8, reviews: 39, desc: 'Curved chaise lounge with bolster pillows.', features: ['Stain-proof Velvet', 'Brass Base'] },
+    { id: 130, cat: 'Seating', title: 'Zen Bamboo Floor Set', price: 10000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], rating: 4.3, reviews: 25, desc: 'Eco-friendly bamboo mats with linen cushions.', features: ['Organic Bamboo', 'Linen covers'] },
+    
+    // --- NEW 40 MIXED PRODUCTS (IDs 131 - 170) ---
+    { id: 131, cat: 'Backdrop', title: 'Luxe Floral Waterfall', price: 22000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.9, reviews: 45, desc: 'Cascading hydrangeas falling from a 10ft frame.', features: ['Silk Hydrangeas', 'Invisible Frame'] },
+    { id: 132, cat: 'Lighting', title: 'Neon Infinity Arch', price: 15500, img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800', gallery: ['https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800', 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800'], rating: 4.7, reviews: 33, desc: 'Layered neon circles creating a deep light tunnel.', features: ['Multi-color Neon', 'Remote Control'] },
+    { id: 133, cat: 'Seating', title: 'Acrylic Swan Chairs', price: 12000, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800'], rating: 4.5, reviews: 21, desc: 'Clear seating with white faux fur accents.', features: ['Ghost Style', 'Faux Fur'] },
+    { id: 134, cat: 'Backdrop', title: 'Gothic Rose Wall', price: 21000, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', 'https://images.unsplash.com/photo-1519741497674-611481833552?w=800'], rating: 4.8, reviews: 55, desc: 'Deep red roses with black lace drapery.', features: ['Lace Drapes', 'Scented Roses'] },
+    { id: 135, cat: 'Lighting', title: 'Chandelier Canopy', price: 28000, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800'], rating: 5.0, reviews: 67, desc: 'Five crystal chandeliers hung from a gold beam.', features: ['Real Crystals', 'Gold Beams'] },
+    { id: 136, cat: 'Seating', title: 'Baroque Sofa Suite', price: 29000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], rating: 4.9, reviews: 18, desc: 'Classic French-inspired carved wood seating.', features: ['Hand-carved', 'Gold Leaf'] },
+    { id: 137, cat: 'Backdrop', title: 'Neon Jungle Wall', price: 16500, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800'], rating: 4.6, reviews: 29, desc: 'Lush monsteras with "Let\'s Party" neon sign.', features: ['Real Foliage', 'Custom Neon'] },
+    { id: 138, cat: 'Lighting', title: 'Halo Light Pillars', price: 13000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.4, reviews: 14, desc: 'Glowing translucent pillars with ring lights.', features: ['Frost Acrylic', 'Dimmable'] },
+    { id: 139, cat: 'Seating', title: 'Rattan Nest Pods', price: 11000, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.3, reviews: 22, desc: 'Bohemian hanging rattan nests for photos.', features: ['Natural Fiber', 'Comfort Padding'] },
+    { id: 140, cat: 'Backdrop', title: 'Macrame Dreamcatcher', price: 12500, img: 'https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800', gallery: ['https://images.unsplash.com/photo-1525183995014-bd94c0750cd5?w=800', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], rating: 4.7, reviews: 41, desc: 'Woven cotton wall with large dreamcatchers.', features: ['Hand-woven', 'Cotton Rope'] },
+    { id: 141, cat: 'Lighting', title: 'Firefly Jar Cluster', price: 8500, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.5, reviews: 38, desc: '50 Mason jars with micro-LEDs hung at heights.', features: ['Vintage Jars', 'Battery Operated'] },
+    { id: 142, cat: 'Seating', title: 'Velvet Ottoman Circle', price: 14000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800'], rating: 4.6, reviews: 27, desc: 'Circular lounge seating in blush pink velvet.', features: ['Modular', 'High Density Foam'] },
+    { id: 143, cat: 'Backdrop', title: 'Sunset Ombre Fabric', price: 13500, img: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', gallery: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800', 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800'], rating: 4.4, reviews: 19, desc: 'Gradient chiffon drapes with backlighting.', features: ['Ombre Effect', 'Soft Chiffon'] },
+    { id: 144, cat: 'Lighting', title: 'Starry Sky Projector', price: 9500, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800'], rating: 4.8, reviews: 52, desc: 'Laser projection mapping of stars on ceiling.', features: ['Laser Tech', 'Programmable'] },
+    { id: 145, cat: 'Seating', title: 'Gold Bamboo Chairs', price: 18500, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800'], rating: 4.7, reviews: 16, desc: 'Chiffon-tied gold chairs for the entire family.', features: ['Metal Frame', 'Chiffon Sash'] },
+    { id: 146, cat: 'Backdrop', title: 'Industrial Mesh Wall', price: 15000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.2, reviews: 11, desc: 'Black wire mesh with neon signs and dried flora.', features: ['Black Iron', 'Modern'] },
+    { id: 147, cat: 'Lighting', title: 'Globe String Festoon', price: 7000, img: 'https://images.unsplash.com/photo-1561565507-67702816913e?w=800', gallery: ['https://images.unsplash.com/photo-1561565507-67702816913e?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.5, reviews: 44, desc: 'Classic festival-style warm globe lights.', features: ['Waterproof', 'Warm Glow'] },
+    { id: 148, cat: 'Seating', title: 'Peacock Throne Suite', price: 21000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800'], rating: 4.9, reviews: 31, desc: 'Large fan-back wicker chairs for the couple.', features: ['Hand-carved Wicker', 'Pillows'] },
+    { id: 149, cat: 'Backdrop', title: 'Crystal Curtain Wall', price: 35000, img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', gallery: ['https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 5.0, reviews: 92, desc: 'Vertical strings of crystals that shimmer.', features: ['High Clarity', 'Spotlight Incl.'] },
+    { id: 150, cat: 'Lighting', title: 'Up-lit Tree Canopy', price: 18000, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1476136230993-88a944328229?w=800'], rating: 4.7, reviews: 26, desc: 'Color-changing lights highlighting venue trees.', features: ['RGBW LED', 'Weatherproof'] },
+    { id: 151, cat: 'Seating', title: 'Linen Garden Benches', price: 9000, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.4, reviews: 15, desc: 'White wooden benches with linen cushions.', features: ['Pine Wood', 'Outdoor Ready'] },
+    { id: 152, cat: 'Backdrop', title: 'Neon Heart Stand', price: 11000, img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800', gallery: ['https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800', 'https://images.unsplash.com/photo-1526649661456-89c7ed4d0018?w=800'], rating: 4.6, reviews: 49, desc: '6ft neon heart on a minimalist stand.', features: ['Pink Neon', 'Stable Base'] },
+    { id: 153, cat: 'Lighting', title: 'UV Glow Decor', price: 19000, img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800', gallery: ['https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800', 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800'], rating: 4.3, reviews: 12, desc: 'Fluorescent florals that glow under UV blacklight.', features: ['UV Paint', 'Blacklights Incl.'] },
+    { id: 154, cat: 'Seating', title: 'Modern Wingback Sofa', price: 15000, img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', gallery: ['https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], rating: 4.8, reviews: 33, desc: 'High-back wing sofa in modern grey velvet.', features: ['Velvet', 'Chrome Legs'] },
+    { id: 155, cat: 'Backdrop', title: 'Hanging Geometric Terrariums', price: 14000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.5, reviews: 24, desc: 'Glass orbs with succulents and fairy lights.', features: ['Geometric Glass', 'Live Plants'] },
+    { id: 156, cat: 'Lighting', title: 'Animated Gobo Patterns', price: 12000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'], rating: 4.2, reviews: 10, desc: 'Rotating patterns of leaves or hearts on floor.', features: ['Custom Gobos', 'Rotating Head'] },
+    { id: 157, cat: 'Seating', title: 'Leather Chesterfields', price: 25000, img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', gallery: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800'], rating: 4.9, reviews: 18, desc: 'Classic tufted brown leather sofa set.', features: ['Genuine Leather', 'Deep Tufting'] },
+    { id: 158, cat: 'Backdrop', title: 'Silk Ribbon Wall', price: 9500, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.4, reviews: 29, desc: 'Multi-color ribbons flowing from a wooden bar.', features: ['Premium Silk', 'Movement'] },
+    { id: 159, cat: 'Lighting', title: 'Warm Curtain Lights', price: 6500, img: 'https://images.unsplash.com/photo-1561565507-67702816913e?w=800', gallery: ['https://images.unsplash.com/photo-1561565507-67702816913e?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.1, reviews: 58, desc: 'Standard 10x10 fairy light wall.', features: ['Plug-in', 'Static Mode'] },
+    { id: 160, cat: 'Seating', title: 'Velvet Pouf Scatter', price: 8000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], rating: 4.5, reviews: 36, desc: 'Mix of round and square velvet poufs.', features: ['Lightweight', 'Variety Colors'] },
+    { id: 161, cat: 'Backdrop', title: 'Copper Pipe Arch', price: 11000, img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', gallery: ['https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800'], rating: 4.3, reviews: 17, desc: 'Minimal copper frame with corner eucalyptus.', features: ['Polished Copper', 'Fresh Foliage'] },
+    { id: 162, cat: 'Lighting', title: 'Vintage Spotlights', price: 14000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'], rating: 4.6, reviews: 22, desc: 'Old-school film set lights for a vintage theme.', features: ['Tripod Stand', 'Warm Tint'] },
+    { id: 163, cat: 'Seating', title: 'Woven Kilim Rug Set', price: 19000, img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', gallery: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800', 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800'], rating: 4.7, reviews: 40, desc: 'Authentic Turkish rugs with floor cushions.', features: ['Wool Rugs', 'Ethically Sourced'] },
+    { id: 164, cat: 'Backdrop', title: 'Shou Sugi Ban Wall', price: 23000, img: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', gallery: ['https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800', 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800'], rating: 4.8, reviews: 15, desc: 'Charred cedar wood wall for a moody, chic look.', features: ['Charred Wood', 'Sleek'] },
+    { id: 165, cat: 'Lighting', title: 'Solar Powered Lanterns', price: 7500, img: 'https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', gallery: ['https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.0, reviews: 12, desc: 'Eco-friendly lanterns for outdoor evening sets.', features: ['Solar Charge', 'Handle Incl.'] },
+    { id: 166, cat: 'Seating', title: 'White Picket Lounge', price: 13000, img: 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', gallery: ['https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'], rating: 4.3, reviews: 24, desc: 'Fenced-in private seating area with grass flooring.', features: ['Synthetic Grass', 'Fence Panels'] },
+    { id: 167, cat: 'Backdrop', title: 'Abstract Gold Splatter', price: 16000, img: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800', gallery: ['https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800', 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800'], rating: 4.7, reviews: 31, desc: 'Hand-painted splatters on a canvas backdrop.', features: ['Gold Leaf', 'Textured'] },
+    { id: 168, cat: 'Lighting', title: 'Interactive Floor LEDs', price: 32000, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', gallery: ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'], rating: 4.9, reviews: 20, desc: 'Pressure-sensitive tiles that change light color.', features: ['Sensor Driven', 'RGB Color'] },
+    { id: 169, cat: 'Seating', title: 'Transparent Inflatable Pods', price: 14500, img: 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800', gallery: ['https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'], rating: 4.1, reviews: 9, desc: 'Quirky bubble seating filled with colored air.', features: ['PVC Material', 'Futuristic'] },
+    { id: 170, cat: 'Backdrop', title: 'Living Herb Wall', price: 19500, img: 'https://images.unsplash.com/photo-1476136230993-88a944328229?w=800', gallery: ['https://images.unsplash.com/photo-1476136230993-88a944328229?w=800', 'https://images.unsplash.com/photo-1512101176959-c557f3516787?w=800'], rating: 4.6, reviews: 14, desc: 'Wall of mint, rosemary, and thyme for fragrance.', features: ['Fragrant', 'Fresh Herbs'] }
+];
+
+        let wishlist = JSON.parse(localStorage.getItem('wed_wish')) || [];
+        let allBookings = JSON.parse(localStorage.getItem('my_orders')) || [];
+        let selectedForCompare = [];
+        let currentProduct = null;
+        let selectedPayMethod = '';
+        let bookingStage = 'advance';
+        let targetOrderID = null;
+
+        function getStarHTML(rating) {
+            let stars = '';
+            for(let i=1; i<=5; i++) {
+                if(i <= Math.floor(rating)) stars += '<i class="bi bi-star-fill"></i>';
+                else if(i - rating < 1) stars += '<i class="bi bi-star-half"></i>';
+                else stars += '<i class="bi bi-star"></i>';
+            }
+            return stars;
+        }
+
+        function renderGrid(items, gridId = 'engagement-grid') {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = items.map(p => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="engagement-card h-100" onclick="showDetails(${p.id})">
+                        <label class="position-absolute top-3 left-3 bg-white px-2 py-1 rounded-pill small shadow-sm" onclick="event.stopPropagation()">
+                            <input type="checkbox" onchange="toggleCompare(${p.id})" ${selectedForCompare.includes(p.id)?'checked':''}> Compare
+                        </label>
+                        <div class="wishlist-btn ${wishlist.includes(p.id)?'active':''}" onclick="event.stopPropagation(); toggleWish(${p.id})"><i class="bi bi-heart-fill"></i></div>
+                        <div class="card-img-container"><img src="${p.img}"></div>
+                        <div class="p-4">
+                            <small class="text-muted fw-bold uppercase">${p.cat}</small>
+                            <h4 class="fw-bold my-1 text-truncate">${p.title}</h4>
+                            <div class="text-warning small mb-2">${getStarHTML(p.rating)} <span class="text-muted ms-1">(${p.rating})</span></div>
+                            <p class="text-gold fw-bold mb-2">₹${p.price.toLocaleString()}</p>
+                            <button class="btn btn-dark w-100 btn-sm rounded-pill">View & Book</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'my-bookings-page') renderMyBookings();
+            window.scrollTo(0,0);
+        }
+
+        function showMain() { showPage('main-content'); renderGrid(engagementPackages); }
+
+        function showDetails(id) {
+            currentProduct = engagementPackages.find(item => item.id === id);
+            
+            // Text Information
+            document.getElementById('detail-title').innerText = currentProduct.title;
+            document.getElementById('detail-cat').innerText = currentProduct.cat;
+            document.getElementById('detail-price').innerText = `₹${currentProduct.price.toLocaleString()}`;
+            document.getElementById('detail-desc').innerText = currentProduct.desc;
+            
+            // Main Image
+            document.getElementById('detail-img').src = currentProduct.img;
+
+            // GALLERY LOGIC: Render Thumbnails
+            const thumbContainer = document.getElementById('image-thumbnails');
+            if (currentProduct.gallery && currentProduct.gallery.length > 0) {
+                thumbContainer.innerHTML = currentProduct.gallery.map(imgUrl => `
+                    <img src="${imgUrl}" 
+                         class="rounded-3 border" 
+                         style="width: 80px; height: 80px; object-fit: cover; cursor: pointer; border: 2px solid transparent;"
+                         onclick="document.getElementById('detail-img').src='${imgUrl}'"
+                         onmouseover="this.style.borderColor='#b89c6d'"
+                         onmouseout="this.style.borderColor='transparent'">
+                `).join('');
+            } else {
+                thumbContainer.innerHTML = "";
+            }
+
+            // Stars and Inclusions
+            document.getElementById('detail-stars').innerHTML = `${getStarHTML(currentProduct.rating)} <span class="text-muted ms-2">(${currentProduct.rating}/5 from ${currentProduct.reviews} clients)</span>`;
+            document.getElementById('package-inclusions-list').innerHTML = currentProduct.features.map(f => `<div class="col-6"><i class="bi bi-patch-check-fill text-warning me-2"></i> ${f}</div>`).join('');
+            
+            // Similar setups
+            const similar = engagementPackages.filter(p => p.cat === currentProduct.cat && p.id !== currentProduct.id).slice(0, 3);
+            renderGrid(similar, 'similar-grid');
+
+            document.getElementById('detail-wish-icon').className = wishlist.includes(id) ? 'bi bi-heart-fill text-danger' : 'bi bi-heart';
+            showPage('product-detail-section');
+        }
+
+        function shareWhatsApp() {
+            const text = `Check out this luxury engagement setup: ${currentProduct.title} - ₹${currentProduct.price.toLocaleString()} at The Artisan Store!`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function toggleCompare(id) {
+            if(selectedForCompare.includes(id)) {
+                selectedForCompare = selectedForCompare.filter(i => i !== id);
+            } else {
+                if(selectedForCompare.length >= 2) {
+                    alert("Select only 2 items to compare.");
+                    renderGrid(engagementPackages); 
+                    return;
+                }
+                selectedForCompare.push(id);
+            }
+            document.getElementById('compare-bar').style.display = selectedForCompare.length > 0 ? 'flex' : 'none';
+            document.getElementById('compare-count').innerText = `Selected: ${selectedForCompare.length}/2`;
+        }
+
+        function launchComparison() {
+            if(selectedForCompare.length < 2) return alert("Please select 2 setups.");
+            const p1 = engagementPackages.find(p => p.id === selectedForCompare[0]);
+            const p2 = engagementPackages.find(p => p.id === selectedForCompare[1]);
+            
+            document.getElementById('compare-head').innerHTML = `<tr><th class="p-3">Features</th><th class="p-3">${p1.title}</th><th class="p-3">${p2.title}</th></tr>`;
+            document.getElementById('compare-body').innerHTML = `
+                <tr><td class="fw-bold">Preview</td><td><img src="${p1.img}" class="rounded shadow-sm mx-auto" style="height:100px;"></td><td><img src="${p2.img}" class="rounded shadow-sm mx-auto" style="height:100px;"></td></tr>
+                <tr><td class="fw-bold">Rating</td><td class="text-warning">${getStarHTML(p1.rating)} (${p1.rating})</td><td class="text-warning">${getStarHTML(p2.rating)} (${p2.rating})</td></tr>
+                <tr><td class="fw-bold">Price</td><td class="text-gold fw-bold">₹${p1.price.toLocaleString()}</td><td class="text-gold fw-bold">₹${p2.price.toLocaleString()}</td></tr>
+                <tr><td class="fw-bold">Inclusions</td><td class="small">${p1.features.join('<br>')}</td><td class="small">${p2.features.join('<br>')}</td></tr>
+            `;
+            new bootstrap.Modal(document.getElementById('compareModal')).show();
+        }
+
+        function clearComparison() { selectedForCompare = []; document.getElementById('compare-bar').style.display = 'none'; renderGrid(engagementPackages); }
+
+        function proceedToCheckout() {
+            if(!document.getElementById('cust-name').value) return alert("Please fill details");
+            bookingStage = 'advance';
+            document.getElementById('chk-label').innerText = "Advance Payment (40%):";
+            document.getElementById('chk-total').innerText = `₹${currentProduct.price.toLocaleString()}`;
+            document.getElementById('chk-advance').innerText = `₹${(currentProduct.price * 0.4).toLocaleString()}`;
+            showPage('checkout-page');
+        }
+
+        function startFinalPayment(id) {
+            bookingStage = 'balance';
+            targetOrderID = id;
+            const order = allBookings.find(o => o.orderId === id);
+            document.getElementById('chk-label').innerText = "Final Balance (60%):";
+            document.getElementById('chk-total').innerText = `₹${order.price.toLocaleString()}`;
+            document.getElementById('chk-advance').innerText = `₹${(order.price * 0.6).toLocaleString()}`;
+            showPage('checkout-page');
+        }
+
+        function confirmPayment() {
+            if(!selectedPayMethod) return alert("Select Payment Method");
+            if(bookingStage === 'advance') {
+                const orderId = "ENG" + Math.floor(Math.random()*900000 + 100000);
+                const order = {
+                    ...currentProduct, orderId, status: '40% Paid - Decor Pending', isCompleted: false,
+                    user: { name: document.getElementById('cust-name').value, date: document.getElementById('cust-date').value, loc: document.getElementById('cust-loc').value },
+                    timestamp: new Date().toLocaleString()
+                };
+                allBookings.push(order);
+            } else {
+                const idx = allBookings.findIndex(o => o.orderId === targetOrderID);
+                allBookings[idx].status = 'Fully Paid - Booking Completed';
+                allBookings[idx].isCompleted = true;
+            }
+            localStorage.setItem('my_orders', JSON.stringify(allBookings));
+            showPage('my-bookings-page');
+        }
+
+        function renderMyBookings() {
+            const container = document.getElementById('bookings-list');
+            if(allBookings.length === 0) { container.innerHTML = "<div class='col-12 text-center py-5'><p>No bookings found.</p></div>"; return; }
+            container.innerHTML = allBookings.map(o => `
+                <div class="col-12">
+                    <div class="card p-4 shadow-sm border-0 bg-white rounded-4 mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-2"><img src="${o.img}" class="rounded-4 w-100" style="height:100px; object-fit:cover;"></div>
+                            <div class="col-md-5">
+                                <h5 class="fw-bold mb-1">${o.title}</h5>
+                                <p class="small text-muted mb-0">Order ID: ${o.orderId} | <span class="badge bg-warning text-dark">${o.status}</span></p>
+                                <p class="small text-muted mb-0">Date: ${o.user.date}</p>
+                            </div>
+                            <div class="col-md-5 text-end">
+                                ${o.status.includes('Decor Completed') ? `<button class="btn btn-primary btn-sm me-2 rounded-pill px-3" onclick="startFinalPayment('${o.orderId}')">Pay Balance 60%</button>` : ''}
+                                <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="cancelBooking('${o.orderId}')">Cancel</button>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3" onclick="downloadInvoice('${o.orderId}')">Invoice</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function selectPay(el, method) {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPayMethod = method;
+            document.getElementById('qr-section').style.display = 'block';
+        }
+
+        async function getPreciseAddress() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
+                    const data = await res.json();
+                    document.getElementById('cust-loc').value = data.display_name;
+                });
+            }
+        }
+
+        function cancelBooking(id) {
+            if(confirm("Cancel this booking? Your advance will be refunded.")) {
+                allBookings = allBookings.filter(o => o.orderId !== id);
+                localStorage.setItem('my_orders', JSON.stringify(allBookings));
+                renderMyBookings();
+            }
+        }
+
+        function downloadInvoice(id) {
+            const o = allBookings.find(i => i.orderId === id);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("THE ARTISAN STORE - INVOICE", 105, 20, null, null, "center");
+            doc.text(`Booking ID: ${o.orderId}`, 20, 40);
+            doc.text(`Total Price: INR ${o.price.toLocaleString()}`, 20, 50);
+            doc.save(`Invoice_${o.orderId}.pdf`);
+        }
+
+        function toggleWish(id) {
+            wishlist.includes(id) ? wishlist = wishlist.filter(i => i !== id) : wishlist.push(id);
+            localStorage.setItem('wed_wish', JSON.stringify(wishlist));
+            document.getElementById('wishCount').innerText = wishlist.length;
+            renderGrid(engagementPackages);
+        }
+
+        function toggleWishDetail() { toggleWish(currentProduct.id); document.getElementById('detail-wish-icon').className = wishlist.includes(currentProduct.id) ? 'bi bi-heart-fill text-danger' : 'bi bi-heart'; }
+
+        function filterData(cat, btn) {
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGrid(cat === 'All' ? engagementPackages : engagementPackages.filter(p => p.cat === cat));
+        }
+
+        function searchEngagements() {
+            const q = document.getElementById('engagementSearch').value.toLowerCase();
+            renderGrid(engagementPackages.filter(p => p.title.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)));
+        }
+
+        window.onload = () => {
+            renderGrid(engagementPackages);
+            document.getElementById('wishCount').innerText = wishlist.length;
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 800);
+            }, 800);
+        };
+    </script>
+</body>
+</html>
